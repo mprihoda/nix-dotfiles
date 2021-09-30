@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: zio spec
+# --
+import zio.test._
+
+object ${1:name} extends DefaultRunnableSpec {
+  override def spec: ZSpec[environment.TestEnvironment, Any] = suite("${2:suite}")(
+    testM("${3:test}")(
+      `%`$0
+    )
+  )
+}

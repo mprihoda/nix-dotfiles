@@ -1,0 +1,329 @@
+# Edit this configuration file to define what should be installed on
+# your system.  Help is available in the configuration.nix(5) man page
+# and in the NixOS manual (accessible by running ‘nixos-help’).
+{ config, pkgs, lib, ... }:
+
+let
+  oper2 = ./oper2.pem;
+  int_rca = ./internal_rca.pem;
+in {
+  imports = [ # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    ./cachix.nix
+  ];
+
+  # Use the GRUB 2 boot loader.
+  boot.loader.grub.enable = true;
+  boot.loader.grub.version = 2;
+  # boot.loader.grub.efiSupport = true;
+  # boot.loader.grub.efiInstallAsRemovable = true;
+  # boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  # Define on which hard drive you want to install Grub.
+  boot.loader.grub.device = "/dev/vda"; # or "nodev" for efi only
+
+  networking.enableIPv6 = false;
+  networking.hostName = "pick"; # Define your hostname.
+  networking.extraHosts = "10.10.9.7 dig.iterative.works"; # Define dig via VPN
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
+  # Per-interface useDHCP will be mandatory in the future, so this generated config
+  # replicates the default behaviour.
+  networking.useDHCP = false;
+  networking.interfaces.ens3.useDHCP = false;
+  networking.interfaces.ens3.ipv4.addresses = [
+    {
+      address = "193.86.200.14";
+      prefixLength = 24;
+    }
+    {
+      address = "193.86.200.16";
+      prefixLength = 24;
+    }
+  ];
+  networking.defaultGateway = "193.86.200.3";
+  networking.nameservers = [ "193.86.200.10" "1.1.1.1" "1.0.0.1" ];
+
+  # Configure network proxy if necessary
+  # networking.proxy.default = "http://user:password@proxy:port/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+  # Select internationalisation properties.
+  i18n.defaultLocale = "en_US.UTF-8";
+  # console = {
+  #   font = "Lat2-Terminus16";
+  #   keyMap = "us";
+  # };
+
+  # Set your time zone.
+  time.timeZone = "Europe/Prague";
+
+  # List packages installed in system profile. To search, run:
+  # $ nix search wget
+  # environment.systemPackages = with pkgs; [
+  #   wget vim
+  # ];
+  nixpkgs.config.packageOverrides = pkgs: {
+    jre = pkgs.adoptopenjdk-openj9-bin-11; # .overrideAttrs (attrs: {
+    #      installPhase = ''
+    #       ${attrs.installPhase}
+    #       $out/bin/keytool -importcert -trustcacerts -noprompt -alias oper2 -cacerts -storepass changeit -file ${oper2}
+    #      '';
+    #    });
+  };
+
+  nixpkgs.config.allowUnfree = true;
+
+  # Install the flakes edition
+  nix.package = pkgs.nixFlakes;
+  # Enable the nix 2.0 CLI and flakes support feature-flags
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes 
+    keep-outputs = true
+    keep-derivations = true
+  '';
+  nix.trustedUsers = [ "root" "mph" ];
+
+  # TODO: move most of the packages to home-manager / project tools
+  environment.systemPackages = with pkgs; [
+    # system mgmt
+    docker
+    docker-compose
+    docker-machine
+    docker-credential-helpers
+    ansible
+
+    # SQL
+    mysql-client
+
+    # language support
+    jre
+    nixfmt
+    scalafmt
+    ammonite
+    sbt
+    bloop
+    coursier
+    nodejs-12_x
+    yarn
+
+    # utitilies
+    httpie
+    jq
+    git-town
+    htop
+    fzf
+    ripgrep
+    fd
+    tmux
+    dtach
+    ## for docker
+    pass
+    gnupg
+    tigervnc
+    ## for org-roam
+    sqlite
+
+    # source support
+    vim
+    git
+    # for doom emacs
+    python3
+
+    #mail
+    notmuch
+    afew
+
+    # web
+    #epiphany
+    #firefox-devedition-bin
+
+    # fonts
+    #iosevka-bin
+  ];
+
+  # Some programs need SUID wrappers, can be configured further or are
+  # started in user sessions.
+  # programs.mtr.enable = true;
+  programs.gnupg.agent = {
+    enable = false;
+    enableSSHSupport = false;
+    pinentryFlavor = "curses";
+  };
+
+  programs.msmtp = {
+    enable = true;
+    accounts = {
+      default = {
+        host = "smtp.fastmail.com";
+        auth = true;
+        user = "michal@prihoda.net";
+        passwordeval = "cat /home/mph/.msmtp_password";
+        tls = true;
+        tls_starttls = true;
+      };
+    };
+  };
+
+  # Enable the OpenSSH daemon.
+  services.openssh = {
+    enable = true;
+    extraConfig = ''
+      StreamLocalBindUnlink yes
+    '';
+  };
+
+  services.httpd = {
+    enable = true;
+    user = "mph";
+    group = "users";
+    adminAddr = "michal@prihoda.net";
+    extraConfig = ''
+      DAVLockDB /run/httpd/DAVLock
+      DAVMinTimeout 600
+    '';
+    virtualHosts = {
+      "pick" = {
+        hostName = "pick.iterative.works";
+        enableACME = true;
+        forceSSL = true;
+        documentRoot = "/home/mph/www";
+        locations = {
+          "/org" = {
+            extraConfig = ''
+              DAV On
+              AuthType Basic
+              AuthName "Org Files"
+              AuthUserFile /home/mph/.DAVlogin
+              Require valid-user
+            '';
+          };
+        };
+      };
+    };
+  };
+
+  services.offlineimap = {
+    enable = true;
+    install = true;
+    path = [ pkgs.pass pkgs.bash pkgs.notmuch pkgs.afew ];
+  };
+
+  services.syncthing = {
+    enable = true;
+    user = "mph";
+    dataDir = "/home/mph";
+  };
+
+  programs.fish.enable = true;
+  programs.mosh.enable = true;
+  programs.java = {
+    enable = true;
+    package = pkgs.jre;
+  };
+
+  # Open ports in the firewall.
+  networking.firewall.allowedTCPPorts =
+    [ 80 443 3389 5901 8887 10000 10001 22000 ];
+  # networking.firewall.allowedUDPPorts = [ ... ];
+  # Or disable the firewall altogether.
+  # networking.firewall.enable = false;
+
+  # Enable CUPS to print documents.
+  # services.printing.enable = true;
+
+  # Enable sound.
+  # sound.enable = true;
+  # hardware.pulseaudio.enable = true;
+
+  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+  # services.xserver.layout = "us";
+  # services.xserver.xkbOptions = "eurosign:e";
+
+  # Enable touchpad support.
+  services.xserver.libinput.enable = true;
+
+  # Enable the KDE Desktop Environment.
+  # services.xserver.displayManager.sddm.enable = true;
+  # services.xserver.desktopManager.plasma5.enable = true;
+  # services.xserver.displayManager.lightdm = {
+  #   enable = true;
+  #   extraConfig = ''
+
+  #     [VNCServer]
+  #     enabled=true
+  #     command=Xvnc -rfbauth /etc/vncpasswd -dpi 192
+  #     port=5900
+  #     listen-address=127.0.0.1
+  #     width=3840
+  #     height=2160
+  #     depth=24
+  #   '';
+  # };
+  # Support VNC
+  # services.xserver.displayManager.job.execCmd = lib.mkForce ''
+  #   export PATH=${pkgs.lightdm}/sbin:${pkgs.tigervnc}/bin:$PATH
+  #   exec ${pkgs.lightdm}/sbin/lightdm
+  # '';
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome.enable = true;
+  services.xrdp.enable = true;
+  services.xrdp.defaultWindowManager = "gnome-session";
+
+  environment.etc.openvpn = { source = ./openvpn; };
+
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = false;
+    autoPrune = {
+      enable = true;
+      dates = "weekly";
+    };
+  };
+
+  services.openvpn.servers = let
+    mkServer = name: {
+      name = "${name}";
+      value = {
+        autoStart = true;
+        config = "config /etc/openvpn/${name}.conf";
+      };
+    };
+    configs = [ "eid-admin" "cra-admin" "ebs" "cmi-portal" ];
+  in builtins.listToAttrs (map mkServer configs);
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # users.users.jane = {
+  #   isNormalUser = true;
+  #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+  # };
+  users.users.mph = {
+    isNormalUser = true;
+    home = "/home/mph";
+    extraGroups = [ "wheel" "docker" ]; # Enable ‘sudo’ for the user.
+    description = "Michal Prihoda";
+    shell = pkgs.fish;
+    openssh.authorizedKeys.keys = [''
+      ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDO6sYzQBt+7Z7oRDMJRQGvbsctYCoBXH4KU9S6f3jp6lSbE7KhtaTJkf3GF2/4nV5qbD5ugqcx5ydJUOnLwxrJ0c+rRDXm+px0CgRsinYsqNVfa/VuOZq7aDKK1iujYk24bDkYVL7qg4zyUdAHsNQuwVgyAcOWqFy93FuRQb5Aakxleb1Z3NEJOxQj/D/ArXpX//3SY3Na2qH41+TyU0j3BTJWXTmiILPVtN4us6QxNH0NY/NmuAlcfVnivcW051IH9iPIBnV39I9ScRTQwx6SyPvxr/W48OUMVc3E5hkwaUWmUgTcoUMhqfU8VZ/coKesyFALM9GeDtbOj4+b2lsV mph@Michals-iMac.local
+    ''];
+  };
+
+  nix.allowedUsers = [ "mph" ];
+
+  security.sudo.wheelNeedsPassword = false;
+
+  security.pki.certificateFiles = [ ./oper2.pem ];
+
+  security.acme.email = "michal@prihoda.net";
+  security.acme.acceptTerms = true;
+
+  # This value determines the NixOS release from which the default
+  # settings for stateful data, like file locations and database versions
+  # on your system were taken. It‘s perfectly fine and recommended to leave
+  # this value at the release version of the first install of this system.
+  # Before changing this value read the documentation for this option
+  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  system.stateVersion = "20.03"; # Did you read the comment?
+
+}
