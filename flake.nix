@@ -14,9 +14,11 @@
           ./configuration.nix
           {
             nixpkgs.overlays = [ emacs-overlay.overlay ];
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.mph = import ./home.nix { inherit nix-doom-emacs; };
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.mph = import ./home.nix { inherit nix-doom-emacs; };
+            };
           }
         ];
       };

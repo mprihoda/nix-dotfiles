@@ -12,41 +12,35 @@ in {
     ./cachix.nix
   ];
 
-  # Use the GRUB 2 boot loader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
-  # boot.loader.grub.efiSupport = true;
-  # boot.loader.grub.efiInstallAsRemovable = true;
-  # boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  # Define on which hard drive you want to install Grub.
-  boot.loader.grub.device = "/dev/vda"; # or "nodev" for efi only
+  boot.loader.grub = {
+    enable = true;
+    version = 2;
+    device = "/dev/vda";
+  };
 
-  networking.enableIPv6 = false;
-  networking.hostName = "pick"; # Define your hostname.
-  networking.extraHosts = "10.10.9.7 dig.iterative.works"; # Define dig via VPN
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  networking.useDHCP = false;
-  networking.interfaces.ens3.useDHCP = false;
-  networking.interfaces.ens3.ipv4.addresses = [
-    {
-      address = "193.86.200.14";
-      prefixLength = 24;
-    }
-    {
-      address = "193.86.200.16";
-      prefixLength = 24;
-    }
-  ];
-  networking.defaultGateway = "193.86.200.3";
-  networking.nameservers = [ "193.86.200.10" "1.1.1.1" "1.0.0.1" ];
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  networking = {
+    enableIPv6 = false;
+    hostName = "pick"; # Define your hostname.
+    extraHosts = "10.10.9.7 dig.iterative.works"; # Define dig via VPN
+    useDHCP = false;
+    interfaces = {
+      ens3 = {
+        useDHCP = false;
+        ipv4.addresses = [
+          {
+            address = "193.86.200.14";
+            prefixLength = 24;
+          }
+          {
+            address = "193.86.200.16";
+            prefixLength = 24;
+          }
+        ];
+      };
+    };
+    defaultGateway = "193.86.200.3";
+    nameservers = [ "193.86.200.10" "1.1.1.1" "1.0.0.1" ];
+  };
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -75,14 +69,16 @@ in {
   nixpkgs.config.allowUnfree = true;
 
   # Install the flakes edition
-  nix.package = pkgs.nixFlakes;
-  # Enable the nix 2.0 CLI and flakes support feature-flags
-  nix.extraOptions = ''
-    experimental-features = nix-command flakes 
-    keep-outputs = true
-    keep-derivations = true
-  '';
-  nix.trustedUsers = [ "root" "mph" ];
+  nix = {
+    package = pkgs.nixFlakes;
+    # Enable the nix 2.0 CLI and flakes support feature-flags
+    extraOptions = ''
+      experimental-features = nix-command flakes
+      keep-outputs = true
+      keep-derivations = true
+    '';
+    trustedUsers = [ "root" "mph" ];
+  };
 
   # TODO: move most of the packages to home-manager / project tools
   environment.systemPackages = with pkgs; [
@@ -140,6 +136,8 @@ in {
 
     # fonts
     #iosevka-bin
+    dmenu
+    st
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -225,53 +223,24 @@ in {
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts =
     [ 80 443 3389 5901 8887 10000 10001 22000 ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
+  services.xserver = {
+    enable = false;
+    autorun = false;
+    libinput.enable = true;
+    displayManager.sddm.enable = false;
+    windowManager.dwm.enable = true;
+    desktopManager.xterm.enable = true;
+  };
 
-  # Enable sound.
-  # sound.enable = true;
-  # hardware.pulseaudio.enable = true;
+  services.xrdp = {
+    enable = true;
+    defaultWindowManager = "dwm";
+  };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
-
-  # Enable touchpad support.
-  services.xserver.libinput.enable = true;
-
-  # Enable the KDE Desktop Environment.
-  # services.xserver.displayManager.sddm.enable = true;
-  # services.xserver.desktopManager.plasma5.enable = true;
-  # services.xserver.displayManager.lightdm = {
-  #   enable = true;
-  #   extraConfig = ''
-
-  #     [VNCServer]
-  #     enabled=true
-  #     command=Xvnc -rfbauth /etc/vncpasswd -dpi 192
-  #     port=5900
-  #     listen-address=127.0.0.1
-  #     width=3840
-  #     height=2160
-  #     depth=24
-  #   '';
-  # };
-  # Support VNC
-  # services.xserver.displayManager.job.execCmd = lib.mkForce ''
-  #   export PATH=${pkgs.lightdm}/sbin:${pkgs.tigervnc}/bin:$PATH
-  #   exec ${pkgs.lightdm}/sbin/lightdm
-  # '';
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-  services.xrdp.enable = true;
-  services.xrdp.defaultWindowManager = "gnome-session";
-
-  environment.etc.openvpn = { source = ./openvpn; };
+  environment.etc.openvpn = {
+    source = ./openvpn;
+  };
 
   virtualisation.docker = {
     enable = true;

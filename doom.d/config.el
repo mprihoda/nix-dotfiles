@@ -1,4 +1,5 @@
 ;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+;;
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
@@ -30,7 +31,7 @@
 ;; `load-theme' function. This is the default:
 ;;(setq doom-gruvbox-dark-variant "medium")
 ;;(setq doom-theme 'doom-gruvbox)
-(setq doom-theme 'doom-solarized-light)
+(setq doom-theme 'doom-gruvbox-light)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -50,7 +51,6 @@
 (setq display-line-numbers-type 'relative)
 
 (setq default-input-method "czech")
-
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
@@ -84,7 +84,7 @@
   ;; mph: scala-mode's lsp is hooked in scala's config.el
   ;; TODO: investigate lsp-lens-mode
   :hook  (scala-mode . lsp)
-         (lsp-mode . lsp-lens-mode)
+  (lsp-mode . lsp-lens-mode)
   :config (setq lsp-prefer-flymake nil))
 (use-package! lsp-ui
   :config (setq lsp-ui-doc-enable t
@@ -97,23 +97,23 @@
 (use-package! sbt-mode
   :commands sbt-start sbt-command
   :config
-  ; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+                                        ; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
   ;; allows using SPACE when in the minibuffer
   (substitute-key-definition
    'minibuffer-complete-word
    'self-insert-command
    minibuffer-local-completion-map)
-   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
-   (setq sbt:program-options '("-Dsbt.supershell=false" "-Dsbt.semanticdb=true")))
+  ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+  (setq sbt:program-options '("-Dsbt.supershell=false" "-Dsbt.semanticdb=true")))
 
 (defvar my-company-backend '(company-capf company-tabnine))
-; (after! org (set-company-backend! 'org-journal-mode 'company-capf 'company-dabbrev))
+                                        ; (after! org (set-company-backend! 'org-journal-mode 'company-capf 'company-dabbrev))
 ;; (add-hook! 'org-journal-mode #'org-roam-mode)
 (set-company-backend! '(prog-mode conf-mode yaml-mode) my-company-backend 'company-dabbrev-code 'company-yasnippet)
-; (after! org (set-company-backend! '(org-journal-mode org-mode) my-company-backend 'company-dabbrev))
+                                        ; (after! org (set-company-backend! '(org-journal-mode org-mode) my-company-backend 'company-dabbrev))
 (setq +lsp-company-backends my-company-backend)
 
-; (setq +lsp-company-backends '(company-capf company-tabnine company-files company-yasnippet))
+                                        ; (setq +lsp-company-backends '(company-capf company-tabnine company-files company-yasnippet))
 (setq lsp-enable-file-watchers t
       lsp-file-watch-threshold 4000)
 
@@ -138,7 +138,7 @@
         (:eval
          (let ((project-name (projectile-project-name)))
            (unless (string= "-" project-name)
-                          (format (if (buffer-modified-p)  " ◉  %s" " ●  %s") project-name))))))
+             (format (if (buffer-modified-p)  " ◉  %s" " ●  %s") project-name))))))
 
 ;; Display the window title in the terminal
 ;;(setq my-init-terminal-title '(when (and
@@ -153,7 +153,7 @@
 ;; Try to set this after notmuch loads, otherwise it stays nil
 (after! notmuch
   (setq
-      notmuch-fcc-dirs "fastmail/Sent +sent"))
+   notmuch-fcc-dirs "fastmail/Sent +sent"))
 
 (after! evil-escape
   (setq evil-escape-key-sequence "fd"))
@@ -240,3 +240,12 @@
         :desc "Toggle show super" "s" #'lsp-metals-toggle-show-super-method-lenses
         :desc "SBT" "b" #'sbt-start)
   )
+
+;; gnupg
+(after! epa
+  (setq epg-pinentry-mode nil)) ;; I don't want Emacs to handle the pinentry, remote agent does that.
+
+;;SQL
+(after! sql-mode
+  (sql-set-product-feature 'mysql :prompt-regexp "[mM]y[sS][qQ][lL]\\( \\[.*?]\\)?>")
+  (load! "sql-connections.el.gpg" doom-private-dir))

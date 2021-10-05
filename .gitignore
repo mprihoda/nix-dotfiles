@@ -1,9 +1,1 @@
-.gitsecret/keys/random_seed
-!*.secret
-openvpn/certs/mph.key
-openvpn/cmi/key.key
-openvpn/cmi/ta.key
-openvpn/ebs/key.pem
-openvpn/ebs/ta.key
-openvpn/eid/ta.key
 result
