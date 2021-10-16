@@ -21,7 +21,7 @@ in {
   networking = {
     enableIPv6 = false;
     hostName = "pick"; # Define your hostname.
-    extraHosts = "10.10.9.7 dig.iterative.works"; # Define dig via VPN
+    extraHosts = "10.10.9.8 dig.iterative.works"; # Define dig via VPN
     useDHCP = false;
     interfaces = {
       ens3 = {
@@ -116,6 +116,7 @@ in {
     ## for docker
     pass
     gnupg
+    pinentry
     tigervnc
     ## for org-roam
     sqlite
@@ -144,8 +145,8 @@ in {
   # started in user sessions.
   # programs.mtr.enable = true;
   programs.gnupg.agent = {
-    enable = false;
-    enableSSHSupport = false;
+    enable = true;
+    enableSSHSupport = true;
     pinentryFlavor = "curses";
   };
 
@@ -250,6 +251,13 @@ in {
       dates = "weekly";
     };
   };
+
+  sops.defaultSopsFile = ./secrets/secrets.yaml;
+  sops.secrets."openvpn/oper/mph.key" = {};
+  sops.secrets."openvpn/cmi/cmi.key" = {};
+  sops.secrets."openvpn/cmi/ta.key" = {};
+  sops.secrets."openvpn/ebs/ta.key" = {};
+  sops.secrets."openvpn/eid/ta.key" = {};
 
   services.openvpn.servers = let
     mkServer = name: {

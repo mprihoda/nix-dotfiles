@@ -1,0 +1,9 @@
+keys:
+  - &admin db8197fcd8513e912b8aa5223f4c094d920579a6
+  - &pick df0db47aee48ad1cb3218f38a109196eb98fc74f
+creation_rules:
+  - path_regex: secrets/[^/]+\.yaml$
+    key_groups:
+      - pgp:
+          - *admin
+          - *pick

@@ -52,6 +52,8 @@
 
 (setq default-input-method "czech")
 
+(setq enable-local-variables t)
+
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
 ;; - `load!' for loading external *.el files relative to this one
@@ -76,7 +78,7 @@
   (cl-adjoin 'company-tabnine (default-value 'company-backends)))
 
 (after! company
-  (setq company-idle-delay 0
+  (setq company-idle-delay 0.5
         company-show-quick-access t))
 
 (use-package! lsp-mode
@@ -86,13 +88,16 @@
   :hook  (scala-mode . lsp)
   (lsp-mode . lsp-lens-mode)
   :config (setq lsp-prefer-flymake nil))
-(use-package! lsp-ui
-  :config (setq lsp-ui-doc-enable t
-                lsp-ui-sideline-show-hover t))
+
+;;(use-package! lsp-ui
+;;  :config (setq lsp-ui-doc-enable t
+;;                lsp-ui-sideline-show-hover t))
+
 (use-package! lsp-metals
   :config (setq lsp-metals-treeview-show-when-views-received nil
-                lsp-metals-show-implicit-arguments t
-                lsp-metals-show-inferred-type t))
+                lsp-metals-show-implicit-arguments nil
+                lsp-metals-show-inferred-type nil))
+
 ;; Enable sbt mode for executing sbt commands
 (use-package! sbt-mode
   :commands sbt-start sbt-command
@@ -106,14 +111,8 @@
   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
   (setq sbt:program-options '("-Dsbt.supershell=false" "-Dsbt.semanticdb=true")))
 
-(defvar my-company-backend '(company-capf company-tabnine))
-                                        ; (after! org (set-company-backend! 'org-journal-mode 'company-capf 'company-dabbrev))
-;; (add-hook! 'org-journal-mode #'org-roam-mode)
-(set-company-backend! '(prog-mode conf-mode yaml-mode) my-company-backend 'company-dabbrev-code 'company-yasnippet)
-                                        ; (after! org (set-company-backend! '(org-journal-mode org-mode) my-company-backend 'company-dabbrev))
-(setq +lsp-company-backends my-company-backend)
+(setq +lsp-company-backends 'company-tabnine)
 
-                                        ; (setq +lsp-company-backends '(company-capf company-tabnine company-files company-yasnippet))
 (setq lsp-enable-file-watchers t
       lsp-file-watch-threshold 4000)
 
@@ -238,6 +237,7 @@
         :desc "Toggle implicit params" "p" #'lsp-metals-toggle-show-implicit-arguments
         :desc "Toggle implicit conversions" "c" #'lsp-metals-toggle-show-implicit-conversions
         :desc "Toggle show super" "s" #'lsp-metals-toggle-show-super-method-lenses
+        :desc "Build" "l" #'(lambda () "Build using sbt" (interactive) (sbt-command (if (boundp 'my/sbt-build-command) my/sbt-build-command "compile")))
         :desc "SBT" "b" #'sbt-start)
   )
 
@@ -246,6 +246,10 @@
   (setq epg-pinentry-mode nil)) ;; I don't want Emacs to handle the pinentry, remote agent does that.
 
 ;;SQL
-(after! sql-mode
+(after! sql
   (sql-set-product-feature 'mysql :prompt-regexp "[mM]y[sS][qQ][lL]\\( \\[.*?]\\)?>")
-  (load! "sql-connections.el.gpg" doom-private-dir))
+  (load-file (expand-file-name "sql-connections.el.gpg" doom-private-dir)))
+
+(after! lsp
+  ;; The java workspace path is not expanded in +lsp.el, should fix
+  (setq lsp-java-workspace-dir (expand-file-name lsp-java-workspace-dir)))
