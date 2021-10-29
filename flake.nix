@@ -6,25 +6,30 @@
     sops-nix.url = "github:Mic92/sops-nix";
   };
 
-  outputs = { self, nixpkgs, ... }@inputs: {
-    nixosConfigurations.pick = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        inputs.home-manager.nixosModule
-        inputs.sops-nix.nixosModule
-        ./configuration.nix
-        {
-          config = {
-            nixpkgs.overlays = [ inputs.emacs-overlay.overlay ];
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users.mph =
-                import ./home.nix { inherit (inputs) nix-doom-emacs; };
+  outputs = { self, nixpkgs, ... }@inputs:
+    let
+
+      inherit (nixpkgs) lib;
+      inherit (inputs) home-manager sops-nix emacs-overlay nix-doom-emacs;
+
+    in {
+      nixosConfigurations.pick = lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          home-manager.nixosModule
+          sops-nix.nixosModule
+          ./configuration.nix
+          {
+            config = {
+              nixpkgs.overlays = [ emacs-overlay.overlay ];
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                users.mph = import ./home.nix { inherit nix-doom-emacs; };
+              };
             };
-          };
-        }
-      ];
+          }
+        ];
+      };
     };
-  };
 }
