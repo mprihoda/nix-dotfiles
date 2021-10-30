@@ -1,0 +1,7 @@
+* Inbox
+** TODO Install vscode with remote-ssh on Macbook
+
+To make the server work without problems, see https://github.com/nix-community/home-manager/issues/939
+** TODO Make sure to install direnv with flakes support using home-manager
+
+This works from cmdline: ~nix-env -f '<nixpkgs>' -i -E 'pkgs: (pkgs {}).nix-direnv.override { enableFlakes = true; }'~

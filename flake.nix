@@ -1,13 +1,17 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-21.05";
-    nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-21.05-darwin";
-    home-manager.url = "github:rycee/home-manager";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    home-manager = {
+      url = "github:rycee/home-manager/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs/develop";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     sops-nix.url = "github:Mic92/sops-nix";
-    darwin.url = "github:lnl7/nix-darwin/master";
-    darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
+    darwin = {
+      url = "github:lnl7/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, darwin, ... }@inputs: {
@@ -22,7 +26,7 @@
     # Build with: nix build .#darwinConfigurations.Macbook-Pro.system
     # Switch with: ./result/sw/bin/darwin-rebuild switch --flake .#Macbook-Pro
     darwinConfigurations = {
-      "Macbook-Pro" = darwin.lib.darwinSystem (import ./machines/darwin {
+      "MacBook-Pro" = darwin.lib.darwinSystem (import ./machines/macbook {
         inherit (inputs) home-manager nix-doom-emacs emacs-overlay;
       });
     };
