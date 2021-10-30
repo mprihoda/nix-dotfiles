@@ -35,7 +35,12 @@
             [
               bbenoist.nix
               brettm12345.nixfmt-vscode
-              ms-vscode-remote.remote-ssh
+              (ms-vscode-remote.remote-ssh.overrideAttrs (super: {
+                # Replace node version 12 with 14, as the new VS code needs 14 installed
+                # but the extension checks only for node 12 installed
+                postPatch =
+                  builtins.replaceStrings [ "12" ] [ "14" ] super.postPatch;
+              }))
               vscodevim.vim
             ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
               {
