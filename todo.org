@@ -1,5 +1,8 @@
 * Inbox
-** TODO Install vscode with remote-ssh on Macbook
+** KILL Install vscode with remote-ssh on Macbook
+
+- Note taken on [2021-10-30 so 16:17] \\
+  I tried to do it according to the issue and VSCode wiki page, it did not work anyway and it is still necessary to update the node.
 
 To make the server work without problems, see https://github.com/nix-community/home-manager/issues/939
 ** TODO Make sure to install direnv with flakes support using home-manager
