@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: (current hour:minute)
+# key: now
+# uuid: now
+# --
+`(format-time-string "%H:%M")`
