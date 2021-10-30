@@ -18,6 +18,10 @@ in {
     device = "/dev/vda";
   };
 
+  boot.kernel.sysctl = {
+    "fs.inotify.max_user_watches" = 524288;
+  };
+
   networking = {
     enableIPv6 = false;
     hostName = "pick"; # Define your hostname.
@@ -67,6 +71,7 @@ in {
   };
 
   nixpkgs.config.allowUnfree = true;
+
 
   # Install the flakes edition
   nix = {
