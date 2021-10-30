@@ -7,29 +7,12 @@
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
-    let
-
-      inherit (nixpkgs) lib;
-      inherit (inputs) home-manager sops-nix emacs-overlay nix-doom-emacs;
-
-    in {
-      nixosConfigurations.pick = lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          home-manager.nixosModule
-          sops-nix.nixosModule
-          ./configuration.nix
-          {
-            config = {
-              nixpkgs.overlays = [ emacs-overlay.overlay ];
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                users.mph = import ./home.nix { inherit nix-doom-emacs; };
-              };
-            };
-          }
-        ];
+    {
+      nixosConfigurations = {
+        pick = nixpkgs.lib.nixosSystem (import ./machines/pick {
+          inherit (inputs) home-manager sops-nix nix-doom-emacs emacs-overlay;
+        });
       };
+
     };
 }
