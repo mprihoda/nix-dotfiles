@@ -44,8 +44,6 @@
     pandoc
     texlive.combined.scheme-full
 
-    # emacs
-    # ((emacsPackagesNgGen emacs).emacsWithPackages(epkgs: [ epkgs.vterm ]))
     msmtp
     fontconfig
   ];
@@ -71,10 +69,6 @@
   nix.package = pkgs.nixFlakes; # NOTE: EXPERIMENTAL.
   nix.extraOptions = lib.optionalString (config.nix.package == pkgs.nixFlakes)
     "experimental-features = nix-command flakes";
-
-  services.emacs = {
-    enable = false; # Until I find out how to set the package from doom-emacs
-  };
 
   environment.etc."msmtprc".text = ''
     account default

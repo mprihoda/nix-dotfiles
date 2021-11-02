@@ -12,6 +12,9 @@
       url = "github:lnl7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    doom-emacs.url = "github:hlissner/doom-emacs/develop";
+    doom-emacs.flake = false;
   };
 
   outputs = { self, nixpkgs, darwin, ... }@inputs: {
@@ -27,7 +30,7 @@
     # Switch with: ./result/sw/bin/darwin-rebuild switch --flake .#Macbook-Pro
     darwinConfigurations = {
       "MacBook-Pro" = darwin.lib.darwinSystem (import ./machines/macbook {
-        inherit (inputs) home-manager nix-doom-emacs emacs-overlay;
+        inherit (inputs) home-manager nix-doom-emacs emacs-overlay doom-emacs;
       });
     };
   };

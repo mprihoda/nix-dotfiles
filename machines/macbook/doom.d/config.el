@@ -36,7 +36,8 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory (expand-file-name "~/org/"))
 (setq org-roam-directory (expand-file-name "roam" org-directory)
-      org-roam-dailies-directory "daily/")
+      org-roam-dailies-directory "daily/"
+      org-roam-v2-ack t)
 ;;(setq org-journal-dir (expand-file-name "journal" org-roam-directory)
 ;;      org-journal-file-format "%Y-%m-%d.org"
 ;;      org-journal-file-header "#+title: %Y-%m-%d"
@@ -112,7 +113,7 @@
 (use-package! lsp-mode
   :defer t
   :config
-  (lsp-register-client (make-lsp-client :new-connection (lsp-tramp-connection 'lsp-metals--server-command)
+  (lsp-register-client (make-lsp-client :new-connection (lsp-tramp-connection "metals")
                                         :major-modes '(scala-mode)
                                         :priority -1
                                         :initialization-options '((decorationProvider . t)
