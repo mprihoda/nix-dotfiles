@@ -133,8 +133,8 @@ in {
     python3
 
     #mail
-    notmuch
-    afew
+    #notmuch
+    #afew
 
     # web
     #epiphany
@@ -205,12 +205,6 @@ in {
         };
       };
     };
-  };
-
-  services.offlineimap = {
-    enable = true;
-    install = true;
-    path = [ pkgs.pass pkgs.bash pkgs.notmuch pkgs.afew ];
   };
 
   services.syncthing = {

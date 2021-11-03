@@ -3,19 +3,12 @@
 {
   system = "x86_64-linux";
   modules = [
-    {
-      nixpkgs.overlays = [ emacs-overlay.overlay ];
-    }
+    { nixpkgs.overlays = [ emacs-overlay.overlay ]; }
     home-manager.nixosModule
     sops-nix.nixosModule
     ./configuration.nix
     ./cachix.nix
-    {
-      home-manager = {
-        useGlobalPkgs = true;
-        useUserPackages = true;
-        users.mph = import ./home.nix { inherit nix-doom-emacs; };
-      };
-    }
+    ./modules/mph-mail
+    (import ./home.nix { inherit nix-doom-emacs; })
   ];
 }
