@@ -163,7 +163,7 @@
 ;; Try to set this after notmuch loads, otherwise it stays nil
 (after! notmuch
   (setq notmuch-fcc-dirs "fastmail/Sent +sent"
-        notmuch-command "~/.emacs.d/bin/remote-notmuch.sh"))
+        notmuch-command (expand-file-name "~/.nix-profile/bin/remote-notmuch.sh")))
 
 (after! plantuml-mode
   (setq plantuml-default-exec-mode 'jar))

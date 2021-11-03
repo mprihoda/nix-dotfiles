@@ -3,7 +3,14 @@
 with lib;
 
 let
-  myemacs = pkgs.emacsGcc;
+  emacsWithPackages = (pkgs.emacsPackagesFor pkgs.emacsGcc).emacsWithPackages;
+  myemacs = emacsWithPackages (epkgs: [ epkgs.melpaPackages.vterm ] );
+
+  notmuchScript = pkgs.writeScriptBin "remote-notmuch.sh" ''
+    #!${pkgs.runtimeShell}
+    printf -v ARGS "%q " "$@"
+    exec ssh notmuch notmuch ''${ARGS}
+  '';
 
   editorScript = { name ? "emacseditor", x11 ? false, extraArgs ? [ ] }:
     pkgs.writeScriptBin name ''
@@ -42,13 +49,13 @@ in {
       package = myemacs;
     };
 
-    home.packages = [ (editorScript { x11 = true; }) ];
+    home.packages = [ (editorScript { x11 = true; }) notmuchScript ];
   };
 
   launchd.user.agents.emacs = {
-      path = [ config.environment.systemPath ];
-      serviceConfig.ProgramArguments = [ (toString daemonScript) ];
-      serviceConfig.RunAtLoad = true;
+    path = [ config.environment.systemPath ];
+    serviceConfig.ProgramArguments = [ (toString daemonScript) ];
+    serviceConfig.RunAtLoad = true;
   };
 
 }
