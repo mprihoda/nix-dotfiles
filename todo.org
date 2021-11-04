@@ -1,8 +1,9 @@
 * Inbox
-** TODO Move remote-notmuch to doom.d or as nix script
-
+** TODO Add better unix tools as common modules for Mac and Linux
+* Improvements
+** DONE Move remote-notmuch to doom.d or as nix script
 [[file:~/.dotfiles/machines/macbook/doom.d/config.el::notmuch-command "~/.emacs.d/bin/remote-notmuch.sh"))]]
-** TODO Přidat do emacs vterm modul
+** DONE Přidat do emacs vterm modul
 ** KILL Install vscode with remote-ssh on Macbook
 
 - Note taken on [2021-10-30 so 16:17] \\
