@@ -1,5 +1,4 @@
-{ home-manager, sops-nix, nix-doom-emacs, emacs-overlay, doom-emacs
-, nixpkgs-master }:
+{ home-manager, sops-nix, nix-doom-emacs, emacs-overlay, doom-emacs }:
 
 {
   system = "x86_64-linux";
@@ -15,7 +14,7 @@
     ./configuration.nix
     ./cachix.nix
     ./modules/mph-mail
-    (import ./home.nix { inherit nix-doom-emacs nixpkgs-master; })
+    ./home.nix
     (import ../../modules/doom-emacs { })
   ];
 }
