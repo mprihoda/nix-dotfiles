@@ -1,6 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-master.url = "github:nixos/nixpkgs/master";
     home-manager = {
       url = "github:rycee/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -22,7 +23,9 @@
     # Switch with: nixos-rebuild switch --flake '.#'
     nixosConfigurations = {
       pick = nixpkgs.lib.nixosSystem (import ./machines/pick {
-        inherit (inputs) home-manager sops-nix nix-doom-emacs emacs-overlay doom-emacs;
+        inherit (inputs)
+          home-manager sops-nix nix-doom-emacs emacs-overlay doom-emacs
+          nixpkgs-master;
       });
     };
 
