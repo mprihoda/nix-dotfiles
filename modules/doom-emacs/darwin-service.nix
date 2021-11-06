@@ -1,4 +1,4 @@
-{ daemonScript, config }:
+{ daemonScript, config, ... }:
 
 {
   launchd.user.agents = {
