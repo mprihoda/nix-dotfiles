@@ -22,7 +22,7 @@
     # Switch with: nixos-rebuild switch --flake '.#'
     nixosConfigurations = {
       pick = nixpkgs.lib.nixosSystem (import ./machines/pick {
-        inherit (inputs) home-manager sops-nix nix-doom-emacs emacs-overlay;
+        inherit (inputs) home-manager sops-nix nix-doom-emacs emacs-overlay doom-emacs;
       });
     };
 

@@ -12,10 +12,7 @@ let
   hmConfig = { ... }: {
     home-manager.useGlobalPkgs = true;
     home-manager.users.mph = {
-      imports = [
-        # (import ./modules/my-nix-doom-emacs { inherit nix-doom-emacs; })
-        ./modules/vscode
-      ];
+      imports = [ ./modules/vscode ./modules/remote-notmuch ];
     };
   };
 in {
@@ -26,6 +23,12 @@ in {
     ./configuration.nix
     overlays
     hmConfig
-    ./modules/my-doom-emacs
+    (import ../../modules/doom-emacs {
+      x11 = true;
+      # TODO: find a better way to do separate service config for darwin and linux
+      # mkIf config.stdenv.isDarwin does not work, it complains about unset
+      # config.environment.systemPath - which is on linux true
+      serviceInit = ../../modules/doom-emacs/darwin-service.nix;
+    })
   ];
 }

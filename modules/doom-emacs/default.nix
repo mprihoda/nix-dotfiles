@@ -1,16 +1,12 @@
+{ x11 ? false, user ? "mph", serviceInit ? ./linux-service.nix }:
+
 { config, lib, pkgs, ... }:
 
 with lib;
 
 let
   emacsWithPackages = (pkgs.emacsPackagesFor pkgs.emacsGcc).emacsWithPackages;
-  myemacs = emacsWithPackages (epkgs: [ epkgs.melpaPackages.vterm ] );
-
-  notmuchScript = pkgs.writeScriptBin "remote-notmuch.sh" ''
-    #!${pkgs.runtimeShell}
-    printf -v ARGS "%q " "$@"
-    exec ssh notmuch notmuch ''${ARGS}
-  '';
+  myemacs = emacsWithPackages (epkgs: [ epkgs.melpaPackages.vterm ]);
 
   editorScript = { name ? "emacseditor", x11 ? false, extraArgs ? [ ] }:
     pkgs.writeScriptBin name ''
@@ -41,21 +37,18 @@ let
     exec ${myemacs}/bin/emacs --fg-daemon
   '';
 
-in {
+in mkMerge [
+  {
+    home-manager.users.${user} = {
+      programs.emacs = {
+        enable = true;
+        package = myemacs;
+      };
 
-  home-manager.users.mph = {
-    programs.emacs = {
-      enable = true;
-      package = myemacs;
+      home.packages = [ (editorScript { inherit x11; }) ];
+
     };
+  }
 
-    home.packages = [ (editorScript { x11 = true; }) notmuchScript ];
-  };
-
-  launchd.user.agents.emacs = {
-    path = [ config.environment.systemPath ];
-    serviceConfig.ProgramArguments = [ (toString daemonScript) ];
-    serviceConfig.RunAtLoad = true;
-  };
-
-}
+  (import serviceInit { inherit daemonScript user config pkgs lib; })
+]
