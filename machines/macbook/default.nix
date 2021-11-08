@@ -9,10 +9,11 @@ let
     ];
   };
 
-  hmConfig = { ... }: {
+  hmConfig = { pkgs, ... }: {
     home-manager.useGlobalPkgs = true;
     home-manager.users.mph = {
       imports = [ ./modules/vscode ./modules/remote-notmuch ];
+      home.packages = with pkgs; [ mosh ];
     };
   };
 in {
