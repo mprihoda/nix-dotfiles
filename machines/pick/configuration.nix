@@ -152,21 +152,7 @@ in {
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
-    pinentryFlavor = "curses";
-  };
-
-  programs.msmtp = {
-    enable = true;
-    accounts = {
-      default = {
-        host = "smtp.fastmail.com";
-        auth = true;
-        user = "michal@prihoda.net";
-        passwordeval = "cat /home/mph/.msmtp_password";
-        tls = true;
-        tls_starttls = true;
-      };
-    };
+    pinentryFlavor = "emacs";
   };
 
   # Enable the OpenSSH daemon.
