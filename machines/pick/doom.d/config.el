@@ -127,8 +127,9 @@
   (setq plantuml-default-exec-mode 'server
         plantuml-server-url "http://localhost:8080/"))
 
-(use-package! pinentry
-  :config (pinentry-start))
+;; Call manually in emacs daemon, so that it does not get overriden each time in new emacs
+;;(use-package! pinentry
+;;  :config (pinentry-start))
 
 ;; Set the frame title format to something more useful
 (setq frame-title-format
@@ -253,3 +254,6 @@
 (after! lsp
   ;; The java workspace path is not expanded in +lsp.el, should fix
   (setq lsp-java-workspace-dir (expand-file-name lsp-java-workspace-dir)))
+
+(after! tramp
+      (add-to-list 'tramp-remote-path 'tramp-own-remote-path))

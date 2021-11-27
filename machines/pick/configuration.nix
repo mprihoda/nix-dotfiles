@@ -129,8 +129,8 @@ in {
     # source support
     vim
     git
-    # for doom emacs
-    python3
+    # for doom emacs and projector
+    (python3.withPackages (p: with p; [ virtualenv ]))
 
     #mail
     #notmuch
