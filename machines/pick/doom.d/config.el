@@ -78,7 +78,8 @@
   (cl-adjoin 'company-tabnine (default-value 'company-backends)))
 
 (after! company
-  (setq company-idle-delay 0.5
+  (setq +lsp-company-backends '(company-tabnine :separate company-capf company-yasnippet)
+        company-idle-delay 0.5
         company-show-quick-access t))
 
 (use-package! lsp-mode
@@ -110,8 +111,6 @@
    minibuffer-local-completion-map)
   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
   (setq sbt:program-options '("-Dsbt.supershell=false" "-Dsbt.semanticdb=true")))
-
-(setq +lsp-company-backends 'company-tabnine)
 
 (setq lsp-enable-file-watchers t
       lsp-file-watch-threshold 4000)
