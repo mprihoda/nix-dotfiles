@@ -13,7 +13,49 @@ let
     home-manager.useGlobalPkgs = true;
     home-manager.users.mph = {
       imports = [ ./modules/vscode ./modules/remote-notmuch ];
-      home.packages = with pkgs; [ mosh ];
+      home.packages = with pkgs; [
+        # system mgmt
+        docker
+        docker-compose
+        docker-machine
+        docker-credential-helpers
+        ansible
+
+        # SQL
+        mysql-client
+
+        # language support
+        adoptopenjdk-bin
+        nixfmt
+        ammonite
+
+        # security
+        pass
+
+        # utitilies
+        httpie
+        jq
+        git-town
+        htop
+        fzf
+        ripgrep
+        fd
+        mosh
+        tmux
+        gnupg
+        coreutils
+        fish
+        direnv
+        mosh
+        #ipfs
+
+        # document tools
+        pandoc
+        texlive.combined.scheme-full
+
+        msmtp
+        fontconfig
+      ];
     };
   };
 in {

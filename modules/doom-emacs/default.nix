@@ -11,7 +11,8 @@ let
   editorScript = { name ? "emacseditor", x11 ? false, extraArgs ? [ ] }:
     pkgs.writeScriptBin name ''
       #!${pkgs.runtimeShell}
-      export TERM=xterm-direct
+      # Why export TERM? Mic92 used it in his dotfiles, but it breaks colors in terminal on macbook.
+      # export TERM=xterm-direct
       # breaks clipetty in combination with tmux + mosh? https://github.com/spudlyo/clipetty/pull/22
       unset SSH_TTY
       exec -a emacs ${myemacs}/bin/emacsclient \

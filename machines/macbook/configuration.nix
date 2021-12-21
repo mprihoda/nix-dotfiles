@@ -1,52 +1,7 @@
 { config, pkgs, lib, ... }:
 
 {
-  environment.systemPackages = with pkgs; [
-    # system mgmt
-    docker
-    docker-compose
-    docker-machine
-    docker-credential-helpers
-    ansible
-
-    # term
-    kitty
-
-    # SQL
-    mysql-client
-
-    # language support
-    adoptopenjdk-bin
-    nixfmt
-    scalafmt
-    ammonite
-
-    # security
-    pass
-
-    # utitilies
-    httpie
-    jq
-    git-town
-    htop
-    fzf
-    ripgrep
-    fd
-    mosh
-    tmux
-    gnupg
-    coreutils
-    fish
-    direnv
-    #ipfs
-
-    # document tools
-    pandoc
-    texlive.combined.scheme-full
-
-    msmtp
-    fontconfig
-  ];
+  # environment.systemPackages = with pkgs; [];
 
   environment.shells = [ pkgs.bashInteractive pkgs.zsh pkgs.fish ];
 

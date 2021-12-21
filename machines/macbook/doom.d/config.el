@@ -67,7 +67,14 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 (use-package! company-tabnine
-  :after company)
+  :after company
+  :config
+  (cl-adjoin 'company-tabnine (default-value 'company-backends)))
+
+(after! company
+  (setq +lsp-company-backends '(company-tabnine :separate company-capf company-yasnippet)
+        company-idle-delay 0.5
+        company-show-quick-access t))
 
 ;;(use-package! lsp-mode
   ;; Optional - enable lsp-mode automatically in scala files
@@ -109,6 +116,9 @@
          :prefix "n"
          (:prefix "r"
           :desc "Open index" "RET" #'my/org-roam-visit-index))))
+
+(after! tramp
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 (use-package! lsp-mode
   :defer t
@@ -165,8 +175,15 @@
   (setq notmuch-fcc-dirs "fastmail/Sent +sent"
         notmuch-command (expand-file-name "~/.nix-profile/bin/remote-notmuch.sh")))
 
+; Fails with Text is read-only for some reason
+;(after! plantuml-mode
+;  (setq plantuml-default-exec-mode 'server
+;        plantuml-server-url "http://pick.iterative.works:18888/plantuml"))
+
 (after! plantuml-mode
-  (setq plantuml-default-exec-mode 'jar))
+  (setq plantuml-default-exec-mode 'jar
+        plantuml-jar-args '("-charset" "UTF-8")
+        plantuml-java-args '("-Djava.awt.headless=true" "-jar" "--illegal-access=deny" "-Dapple.awt.UIElement=true")))
 
 (after! evil-escape
   (setq evil-escape-key-sequence "fd"))
@@ -218,3 +235,24 @@
            "* %U %?\n %i\n %a"
            :heading "Changelog"
            :prepend t))))
+
+;; Metals
+(after! lsp-metals
+  (setq lsp-ui-sideline-diagnostic-max-lines 5)
+  (defvar lsp-metals-map (make-sparse-keymap) "A map for metals keybindings")
+  (map! :map lsp-metals-map
+        :mode scala-mode
+        :localleader
+        :desc "Toggle inferred types" "t" #'lsp-metals-toggle-show-inferred-type
+        :desc "Toggle implicit params" "p" #'lsp-metals-toggle-show-implicit-arguments
+        :desc "Toggle implicit conversions" "c" #'lsp-metals-toggle-show-implicit-conversions
+        :desc "Toggle show super" "s" #'lsp-metals-toggle-show-super-method-lenses
+        :desc "Build" "l" #'(lambda () "Build using sbt" (interactive) (sbt-command (if (boundp 'my/sbt-build-command) my/sbt-build-command "compile")))
+        :desc "SBT" "b" #'sbt-start)
+  )
+
+(after! lsp
+  ;; The java workspace path is not expanded in +lsp.el, should fix
+  (setq lsp-java-workspace-dir (expand-file-name lsp-java-workspace-dir)))
+
+(use-package! ob-ammonite :after org)
