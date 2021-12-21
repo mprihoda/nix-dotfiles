@@ -55,3 +55,4 @@
 (package! posframe)
 (package! dap-mode)
 (package! pinentry)
+(package! caddyfile-mode)
