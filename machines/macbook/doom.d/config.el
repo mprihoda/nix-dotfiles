@@ -163,7 +163,6 @@
 
 ;; Notmuch
 (setq message-directory (expand-file-name "~/mail")
-      sendmail-program "/run/current-system/sw/bin/sendmail"
       mail-envelope-from 'header
       mail-specify-envelope-from t)
 (setq +notmuch-sync-backend 'custom
