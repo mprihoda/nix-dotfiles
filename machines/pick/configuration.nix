@@ -18,9 +18,7 @@ in {
     device = "/dev/vda";
   };
 
-  boot.kernel.sysctl = {
-    "fs.inotify.max_user_watches" = 524288;
-  };
+  boot.kernel.sysctl = { "fs.inotify.max_user_watches" = 524288; };
 
   networking = {
     enableIPv6 = false;
@@ -72,7 +70,6 @@ in {
 
   nixpkgs.config.allowUnfree = true;
 
-
   # Install the flakes edition
   nix = {
     package = pkgs.nixFlakes;
@@ -82,7 +79,10 @@ in {
       keep-outputs = true
       keep-derivations = true
     '';
-    trustedUsers = [ "root" "mph" ];
+    settings = {
+      trusted-users = [ "root" "mph" ];
+      allowed-users = [ "mph" ];
+    };
   };
 
   # TODO: move most of the packages to home-manager / project tools
@@ -150,9 +150,13 @@ in {
   # started in user sessions.
   # programs.mtr.enable = true;
   programs.gnupg.agent = {
-    enable = true;
+    enable = false;
     enableSSHSupport = true;
     pinentryFlavor = "emacs";
+  };
+
+  services.tailscale = {
+    enable = true;
   };
 
   # Enable the OpenSSH daemon.
@@ -224,9 +228,7 @@ in {
     defaultWindowManager = "dwm";
   };
 
-  environment.etc.openvpn = {
-    source = ./openvpn;
-  };
+  environment.etc.openvpn = { source = ./openvpn; };
 
   virtualisation.docker = {
     enable = true;
@@ -238,11 +240,11 @@ in {
   };
 
   sops.defaultSopsFile = ./secrets/secrets.yaml;
-  sops.secrets."openvpn/oper/mph.key" = {};
-  sops.secrets."openvpn/cmi/cmi.key" = {};
-  sops.secrets."openvpn/cmi/ta.key" = {};
-  sops.secrets."openvpn/ebs/ta.key" = {};
-  sops.secrets."openvpn/eid/ta.key" = {};
+  sops.secrets."openvpn/oper/mph.key" = { };
+  sops.secrets."openvpn/cmi/cmi.key" = { };
+  sops.secrets."openvpn/cmi/ta.key" = { };
+  sops.secrets."openvpn/ebs/ta.key" = { };
+  sops.secrets."openvpn/eid/ta.key" = { };
 
   services.openvpn.servers = let
     mkServer = name: {
@@ -271,13 +273,12 @@ in {
     ''];
   };
 
-  nix.allowedUsers = [ "mph" ];
 
   security.sudo.wheelNeedsPassword = false;
 
   security.pki.certificateFiles = [ ./oper2.pem ];
 
-  security.acme.email = "michal@prihoda.net";
+  security.acme.defaults.email = "michal@prihoda.net";
   security.acme.acceptTerms = true;
 
   # This value determines the NixOS release from which the default

@@ -37,8 +37,8 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory (expand-file-name "~/org/"))
 (setq org-roam-directory (expand-file-name "roam" org-directory)
-      org-roam-dailies-directory "journal/"
-      org-roam-link-auto-replace nil
+;;      org-roam-dailies-directory "journal/"
+      org-roam-link-auto-replace t
       org-roam-completion-everywhere nil)
 ;;(setq org-journal-dir (expand-file-name "journal" org-roam-directory)
 ;;      org-journal-file-format "%Y-%m-%d.org"
@@ -75,11 +75,12 @@
 (use-package! company-tabnine
   :after company
   :config
-  (cl-adjoin 'company-tabnine (default-value 'company-backends)))
+  (cl-pushnew 'company-tabnine (default-value 'company-backends)))
 
 (after! company
-  (setq +lsp-company-backends '(company-tabnine :separate company-capf company-yasnippet)
-        company-idle-delay 0.5
+  (set-company-backend! '(scala-mode) '(company-capf company-yasnippet :separate company-tabnine))
+  (setq +lsp-company-backends '(company-capf company-yasnippet :separate company-tabnine))
+  (setq company-idle-delay 0.5
         company-show-quick-access t))
 
 (use-package! lsp-mode
