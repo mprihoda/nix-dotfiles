@@ -78,8 +78,8 @@
   (cl-pushnew 'company-tabnine (default-value 'company-backends)))
 
 (after! company
-  (set-company-backend! '(scala-mode) '(company-capf company-yasnippet :separate company-tabnine))
-  (setq +lsp-company-backends '(company-capf company-yasnippet :separate company-tabnine))
+  (set-company-backend! 'prog-mode 'company-tabnine 'company-capf 'company-yasnippet)
+;;  (setq +lsp-company-backends '(company-capf company-yasnippet :separate company-tabnine))
   (setq company-idle-delay 0.5
         company-show-quick-access t))
 
@@ -257,3 +257,6 @@
 
 (after! tramp
       (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
+
+(after! forge
+  (add-to-list 'forge-alist '("gitlab.e-bs.cz" "gitlab.e-bs.cz/api/v4" "gitlab.e-bs.cz" forge-gitlab-repository)))
