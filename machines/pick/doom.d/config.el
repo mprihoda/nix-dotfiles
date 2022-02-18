@@ -87,9 +87,14 @@
   ;; Optional - enable lsp-mode automatically in scala files
   ;; mph: scala-mode's lsp is hooked in scala's config.el
   ;; TODO: investigate lsp-lens-mode
-  :hook  (scala-mode . lsp)
-  (lsp-mode . lsp-lens-mode)
-  :config (setq lsp-prefer-flymake nil))
+  :hook
+    (scala-mode . lsp)
+    (lsp-mode . lsp-lens-mode)
+  :config
+    (setq lsp-prefer-flymake nil)
+    (remove-hook 'lsp-completion-mode-hook '+lsp-init-company-backends-h))
+
+(after! lsp-mode)
 
 ;;(use-package! lsp-ui
 ;;  :config (setq lsp-ui-doc-enable t
