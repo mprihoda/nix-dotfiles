@@ -128,6 +128,7 @@ in {
 
     # source support
     vim
+    neovim
     git
     # for doom emacs and projector
     (python3.withPackages (p: with p; [ virtualenv ]))
@@ -155,9 +156,7 @@ in {
     pinentryFlavor = "emacs";
   };
 
-  services.tailscale = {
-    enable = true;
-  };
+  services.tailscale = { enable = true; };
 
   # Enable the OpenSSH daemon.
   services.openssh = {
@@ -165,6 +164,15 @@ in {
     extraConfig = ''
       StreamLocalBindUnlink yes
     '';
+  };
+
+  # Code server
+  services.code-server = {
+    enable = true;
+    user = "mph";
+    group = "users";
+    hashedPassword =
+      "$argon2i$v=19$m=4096,t=3,p=1$+CAbWsHaqRmDfMisqV1dTg$TrXOX5uk2u+YTW2pYSu89Jwk/pVSr5lQh2SnHnih2w4";
   };
 
   services.httpd = {
@@ -272,7 +280,6 @@ in {
       ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDO6sYzQBt+7Z7oRDMJRQGvbsctYCoBXH4KU9S6f3jp6lSbE7KhtaTJkf3GF2/4nV5qbD5ugqcx5ydJUOnLwxrJ0c+rRDXm+px0CgRsinYsqNVfa/VuOZq7aDKK1iujYk24bDkYVL7qg4zyUdAHsNQuwVgyAcOWqFy93FuRQb5Aakxleb1Z3NEJOxQj/D/ArXpX//3SY3Na2qH41+TyU0j3BTJWXTmiILPVtN4us6QxNH0NY/NmuAlcfVnivcW051IH9iPIBnV39I9ScRTQwx6SyPvxr/W48OUMVc3E5hkwaUWmUgTcoUMhqfU8VZ/coKesyFALM9GeDtbOj4+b2lsV mph@Michals-iMac.local
     ''];
   };
-
 
   security.sudo.wheelNeedsPassword = false;
 
