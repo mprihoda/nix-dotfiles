@@ -14,7 +14,13 @@
     ./configuration.nix
     ./cachix.nix
     ./modules/mph-mail
-    ./home.nix
+    {
+      home-manager = {
+        useGlobalPkgs = true;
+        useUserPackages = true;
+        users.mph = import ./home.nix;
+      };
+    }
     (import ../../modules/doom-emacs { })
   ];
 }
