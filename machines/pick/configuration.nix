@@ -109,6 +109,7 @@ in {
     yarn
 
     # utitilies
+    inotify-tools
     httpie
     jq
     git-town
