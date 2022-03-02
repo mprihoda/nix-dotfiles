@@ -5,6 +5,8 @@ let
       emacs-overlay.overlay
       # TODO: Remove after https://github.com/NixOS/nixpkgs/issues/137678 is fixed
       (import ./overlays/beautifulsoup4_fix.nix)
+      # TODO: Remove after https://github.com/NixOS/nixpkgs/pull/161216 is in
+      (import ./overlays/ipython_darwin_fix.nix)
       (self: super: { doomEmacsRevision = doom-emacs.rev; })
     ];
   };
@@ -33,7 +35,8 @@ let
         pass
 
         # utitilies
-        httpie
+        # TODO: temporary disabled, build failing in tests/test_plugins_cli.py
+        # httpie
         jq
         git-town
         htop
