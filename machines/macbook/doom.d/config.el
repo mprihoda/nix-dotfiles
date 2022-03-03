@@ -69,61 +69,99 @@
 (use-package! company-tabnine
   :after company
   :config
-  (cl-adjoin 'company-tabnine (default-value 'company-backends)))
+  (cl-pushnew 'company-tabnine (default-value 'company-backends)))
 
 (after! company
-  (setq +lsp-company-backends '(company-tabnine :separate company-capf company-yasnippet)
-        company-idle-delay 0.5
+  (set-company-backend! 'prog-mode 'company-tabnine 'company-capf 'company-yasnippet)
+  (setq company-idle-delay 0.5
         company-show-quick-access t))
 
-;;(use-package! lsp-mode
+(defun lsp-tramp-connection-over-ssh-port-forwarding (command)
+  "Like lsp-tcp-connection, but uses SSH portforwarding."
+  (list
+   :connect (lambda (filter sentinel name environment-fn)
+              (let* ((host "localhost")
+                     (lsp-port (lsp--find-available-port host (cl-incf lsp--tcp-port)))
+                     (command (with-parsed-tramp-file-name buffer-file-name nil
+                                (message "[tcp/ssh hack] running LSP %s on %s / %s" command host localname)
+                                (let* ((unix-socket (format "/tmp/lsp-ssh-portforward-%s.sock" lsp-port))
+                                       (command (list
+                                                 "ssh"
+                                                 ;; "-vvv"
+                                                 "-L" (format "%s:%s" lsp-port unix-socket)
+                                                 host
+                                                 "socat"
+                                                 (format "unix-listen:%s" unix-socket)
+                                                 (format "system:'\"cd %s && %s\"'" (file-name-directory localname) command)
+                                                 )))
+                                  (message "using local command %s" command)
+                                  command)))
+                     (final-command (if (consp command) command (list command)))
+                     (_ (unless (executable-find (cl-first final-command))
+                          (user-error (format "Couldn't find executable %s" (cl-first final-command)))))
+                     (process-environment
+                      (lsp--compute-process-environment environment-fn))
+                     (proc (make-process :name name :connection-type 'pipe :coding 'no-conversion
+                                         :command final-command :sentinel sentinel :stderr (format "*%s::stderr*" name) :noquery t))
+                     (tcp-proc (progn
+                                 (sleep-for 1) ; prevent a connection before SSH has run socat. Ugh.
+                                 (lsp--open-network-stream host lsp-port (concat name "::tcp")))))
+
+                ;; TODO: Same :noquery issue (see above)
+                (set-process-query-on-exit-flag proc nil)
+                (set-process-query-on-exit-flag tcp-proc nil)
+                (set-process-filter tcp-proc filter)
+                (cons tcp-proc proc)))
+   :test? (lambda () t)))
+
+(defun my/lsp-tramp-connection (local-command &optional generate-error-file-fn)
+  "Create LSP stdio connection named name.
+LOCAL-COMMAND is either list of strings, string or function which
+returns the command to execute."
+  ;; 2.5.0-pre (as built from native-comp branch before M Albinus released tramp-2.5)
+  ;; worked fine
+  (defvar tramp-version)
+  (defvar tramp-connection-properties)
+  (when (version< tramp-version "2.5.0-pre")
+    (lsp-warn
+     "Your tramp version - %s - might fail to work with remote LSP. Update to version 2.5 or greater (available on elpa)"
+     tramp-version))
+  ;; Force a direct asynchronous process.
+  (add-to-list 'tramp-connection-properties
+               (list (regexp-quote (file-remote-p default-directory))
+                     "direct-async-process" t))
+  (list :connect (lambda (filter sentinel name environment-fn)
+                   (let* ((final-command (lsp-resolve-final-function
+                                          local-command))
+                          (process-name (generate-new-buffer-name name))
+                          (process-environment
+                           (lsp--compute-process-environment environment-fn))
+                          (proc (make-process
+                                 :name process-name
+                                 :buffer (format "*%s*" process-name)
+                                 :command final-command
+                                 :connection-type 'pipe
+                                 :coding 'no-conversion
+                                 :noquery t
+                                 :filter filter
+                                 :sentinel sentinel
+                                 :stderr (get-buffer-create (format "*%s::stderr*" process-name))
+                                 :file-handler t)))
+                     (cons proc proc)))
+        :test? (lambda () (-> local-command lsp-resolve-final-function
+                              lsp-server-present?))))
+
+(use-package! lsp-mode
   ;; Optional - enable lsp-mode automatically in scala files
   ;; mph: scala-mode's lsp is hooked in scala's config.el
   ;; TODO: investigate lsp-lens-mode
-  ;;  :hook  (scala-mode . lsp)
-  ;;         (lsp-mode . lsp-lens-mode)
-;;  :config (setq lsp-prefer-flymake nil))
-;;(use-package! eglot
-;;  :hook (scala-mode . eglot-ensure))
-;;(use-package! lsp-metals
-;;  :defer t
-;;  :config (setq lsp-metals-treeview-show-when-views-received nil))
-
-;; Enable sbt mode for executing sbt commands
-(use-package! sbt-mode
-  :commands sbt-start sbt-command
+  :hook
+    (scala-mode . lsp)
+    (lsp-mode . lsp-lens-mode)
   :config
-  ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
-  ;; allows using SPACE when in the minibuffer
-  (substitute-key-definition
-   'minibuffer-complete-word
-   'self-insert-command
-   minibuffer-local-completion-map)
-  ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
-  (setq sbt:program-options '("-Dsbt.supershell=false" "-Dsbt.semanticdb=true")))
-
-(defun my/org-roam-visit-index ()
-  (interactive)
-  (let* ((index-name "000 Index")
-         (index-node (org-roam-node-from-title-or-alias index-name)))
-    (org-roam-node-visit index-node)))
-
-(after! org
-  (add-to-list 'org-latex-packages-alist
-                         '("AUTO" "babel" t ("pdflatex")))
-  (map! (:map org-mode-map
-         :leader
-         :prefix "n"
-         (:prefix "r"
-          :desc "Open index" "RET" #'my/org-roam-visit-index))))
-
-(after! tramp
-  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
-
-(use-package! lsp-mode
-  :defer t
-  :config
-  (lsp-register-client (make-lsp-client :new-connection (lsp-tramp-connection "metals")
+    (setq lsp-prefer-flymake nil)
+    (remove-hook 'lsp-completion-mode-hook '+lsp-init-company-backends-h)
+    (lsp-register-client (make-lsp-client :new-connection (lsp-tramp-connection-over-ssh-port-forwarding "metals-emacs")
                                         :major-modes '(scala-mode)
                                         :priority -1
                                         :initialization-options '((decorationProvider . t)
@@ -151,8 +189,44 @@
                                                          (add-hook 'lsp-on-idle-hook #'lsp-metals--did-focus nil t))
                                         :completion-in-comments? t
                                         :remote? t))
+  (setq gc-cons-threshold 100000000) ;; 100mb
+  (setq read-process-output-max (* 1024 1024)) ;; 1mb
   (setq lsp-enable-file-watchers t
         lsp-file-watch-threshold 4000))
+
+;; Enable sbt mode for executing sbt commands
+(use-package! sbt-mode
+  :commands sbt-start sbt-command
+  :config
+  ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+  ;; allows using SPACE when in the minibuffer
+  (substitute-key-definition
+   'minibuffer-complete-word
+   'self-insert-command
+   minibuffer-local-completion-map)
+  ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+  (setq sbt:program-options '("-Dsbt.supershell=false" "-Dsbt.semanticdb=true")))
+
+;; (use-package! eglot
+;;   :hook (scala-mode . eglot-ensure))
+
+(defun my/org-roam-visit-index ()
+  (interactive)
+  (let* ((index-name "000 Index")
+         (index-node (org-roam-node-from-title-or-alias index-name)))
+    (org-roam-node-visit index-node)))
+
+(after! org
+  (add-to-list 'org-latex-packages-alist
+                         '("AUTO" "babel" t ("pdflatex")))
+  (map! (:map org-mode-map
+         :leader
+         :prefix "n"
+         (:prefix "r"
+          :desc "Open index" "RET" #'my/org-roam-visit-index))))
+
+(after! tramp
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 (setq projectile-project-search-path
       '("~/Devel/commercial/e-bs"
@@ -251,7 +325,7 @@
   )
 
 (after! lsp
-  ;; The java workspace path is not expanded in +lsp.el, should fix
-  (setq lsp-java-workspace-dir (expand-file-name lsp-java-workspace-dir)))
+ ;; The java workspace path is not expanded in +lsp.el, should fix
+ (setq lsp-java-workspace-dir (expand-file-name lsp-java-workspace-dir)))
 
 (use-package! ob-ammonite :after org)
