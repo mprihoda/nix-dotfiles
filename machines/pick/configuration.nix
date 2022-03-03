@@ -124,6 +124,7 @@ in {
     gnupg
     pinentry
     tigervnc
+    socat
     ## for org-roam
     sqlite
 
