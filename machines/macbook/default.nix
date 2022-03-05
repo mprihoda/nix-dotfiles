@@ -11,56 +11,6 @@ let
     ];
   };
 
-  hmConfig = { pkgs, ... }: {
-    home-manager.useGlobalPkgs = true;
-    home-manager.users.mph = {
-      imports = [ ./modules/vscode ./modules/remote-notmuch ];
-      home.packages = with pkgs; [
-        # system mgmt
-        docker
-        docker-compose
-        docker-machine
-        docker-credential-helpers
-        ansible
-
-        # SQL
-        mysql-client
-
-        # language support
-        adoptopenjdk-bin
-        nixfmt
-        ammonite
-
-        # security
-        pass
-
-        # utitilies
-        # TODO: temporary disabled, build failing in tests/test_plugins_cli.py
-        # httpie
-        jq
-        git-town
-        htop
-        fzf
-        ripgrep
-        fd
-        mosh
-        tmux
-        gnupg
-        coreutils
-        fish
-        direnv
-        mosh
-        #ipfs
-
-        # document tools
-        pandoc
-        texlive.combined.scheme-full
-
-        msmtp
-        fontconfig
-      ];
-    };
-  };
 in {
   system = "x86_64-darwin";
   modules = [
@@ -68,7 +18,10 @@ in {
     ./cachix.nix
     ./configuration.nix
     overlays
-    hmConfig
+    {
+      home-manager.useGlobalPkgs = true;
+      home-manager.users.mph = import ./home.nix;
+    }
     (import ../../modules/doom-emacs {
       x11 = true;
       # TODO: find a better way to do separate service config for darwin and linux

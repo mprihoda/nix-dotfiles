@@ -225,6 +225,14 @@ returns the command to execute."
          (:prefix "r"
           :desc "Open index" "RET" #'my/org-roam-visit-index))))
 
+;; TODO: remove after update to check if it still causes problems with lsp xref
+;; It reports errors (invalid handler) when visiting files in .jar directories
+;; I could just remove the .jar from the pattern, but I don't think I'm going to miss it anytime soon
+;; TODO: just filter out, instead of setting
+(setq tramp-archive-suffixes
+      '("7z" "apk" "ar" "cab" "CAB" "cpio" "deb" "depot" "exe" "iso" "lzh" "LZH" "msu" "MSU" "mtree" "odb" "odf" "odg" "odp" "ods" "odt" "pax" "rar" "rpm" "shar" "tar" "tbz" "tgz" "tlz" "txz" "tzst" "warc" "xar" "xpi" "xps" "zip" "ZIP")
+      explicit-shell-file-name "/run/current-system/sw/bin/bash")
+
 (after! tramp
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
