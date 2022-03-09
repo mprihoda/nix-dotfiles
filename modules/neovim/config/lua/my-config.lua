@@ -31,7 +31,7 @@ map("n", "<leader>rr", "<cmd>source ~/.config/nvim/init.vim<cr>")
 map("n", "<leader>op", "<cmd>NvimTreeToggle<cr>")
 map("n", "<leader>oP", "<cmd>NvimTreeFindFile<cr>")
 map("n", "<leader>bl", "<cmd>bprev<cr>")
-map("n", "<leader>wc", "<cmd>wclose<cr>")
+map("n", "<leader>wc", "<cmd>close<cr>")
 map("n", "<leader>bd", "<cmd>bdelete<cr>")
 
 -- LSP
