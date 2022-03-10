@@ -4,6 +4,7 @@
 -- TODO: buffer autoreload on change
 -- TODO: open file in local folder
 -- TODO: create file in any folder
+-- TODO: remove bufferline
 --
 -- options
 vim.opt.completeopt = { "menu", "noinsert", "noselect" }
@@ -33,6 +34,7 @@ map("n", "<leader>oP", "<cmd>NvimTreeFindFile<cr>")
 map("n", "<leader>bl", "<cmd>bprev<cr>")
 map("n", "<leader>wc", "<cmd>close<cr>")
 map("n", "<leader>bd", "<cmd>bdelete<cr>")
+map("n", "<leader>qq", "<cmd>qa<cr>")
 
 -- LSP
 map("n", "gD", "<cmd>lua vim.lsp.buf.definition()<CR>")
