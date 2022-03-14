@@ -168,6 +168,8 @@ in {
     '';
   };
 
+  services.eternal-terminal = { enable = true; };
+
   # Code server
   services.code-server = {
     enable = true;
@@ -221,8 +223,8 @@ in {
   };
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts =
-    [ 80 443 3389 5901 8887 10000 10001 22000 ];
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.trustedInterfaces = [ "tailscale0" ];
 
   services.xserver = {
     enable = false;
