@@ -37,6 +37,7 @@
     fish
     direnv
     mosh
+    eternal-terminal
     coursier
     #ipfs
 
