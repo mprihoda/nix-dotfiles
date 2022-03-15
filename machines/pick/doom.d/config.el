@@ -272,3 +272,5 @@
 
 (after! forge
   (add-to-list 'forge-alist '("gitlab.e-bs.cz" "gitlab.e-bs.cz/api/v4" "gitlab.e-bs.cz" forge-gitlab-repository)))
+
+(add-to-list 'auto-mode-alist '("\\.sc\\'" . scala-mode))
