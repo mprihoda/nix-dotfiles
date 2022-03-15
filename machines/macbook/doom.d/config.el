@@ -161,7 +161,9 @@ returns the command to execute."
   :config
     (setq lsp-prefer-flymake nil)
     (remove-hook 'lsp-completion-mode-hook '+lsp-init-company-backends-h)
-    (lsp-register-client (make-lsp-client :new-connection (lsp-tramp-connection-over-ssh-port-forwarding "metals-emacs")
+    ;;(lsp-register-client (make-lsp-client :new-connection (lsp-tramp-connection-over-ssh-port-forwarding "metals-emacs")
+    ;;(lsp-register-client (make-lsp-client :new-connection (my/lsp-tramp-connection "metals-emacs")
+    (lsp-register-client (make-lsp-client :new-connection (lsp-tramp-connection "metals-emacs")
                                         :major-modes '(scala-mode)
                                         :priority -1
                                         :initialization-options '((decorationProvider . t)
@@ -337,3 +339,6 @@ returns the command to execute."
  (setq lsp-java-workspace-dir (expand-file-name lsp-java-workspace-dir)))
 
 (use-package! ob-ammonite :after org)
+
+(after! scala-mode
+  (add-to-list 'auto-mode-alist '("\\.sc\\'" . scala-mode)))
