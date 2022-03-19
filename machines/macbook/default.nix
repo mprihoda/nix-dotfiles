@@ -7,6 +7,8 @@ let
       (import ./overlays/beautifulsoup4_fix.nix)
       # TODO: Remove after https://github.com/NixOS/nixpkgs/pull/161216 is in
       (import ./overlays/ipython_darwin_fix.nix)
+      # TODO: httpie test_plugins_upgrade is failing for some reason
+      (import ./overlays/httpie_darwin_fix.nix)
       (self: super: { doomEmacsRevision = doom-emacs.rev; })
     ];
   };
