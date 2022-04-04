@@ -223,7 +223,7 @@ in {
   };
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [ 80 443 10389 ];
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
 
   services.xserver = {
