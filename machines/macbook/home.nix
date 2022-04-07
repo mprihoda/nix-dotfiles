@@ -47,5 +47,6 @@
 
     msmtp
     fontconfig
+    ledger
   ];
 }
