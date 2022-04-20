@@ -4,7 +4,7 @@
   imports = [ nix-doom-emacs.hmModule ];
   programs.doom-emacs = {
     enable = true;
-    emacsPackage = pkgs.emacsGcc;
+    emacsPackage = pkgs.emacsNativeComp;
     doomPrivateDir = ../../doom.d;
   };
 }

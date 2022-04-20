@@ -5,7 +5,8 @@
 with lib;
 
 let
-  emacsWithPackages = (pkgs.emacsPackagesFor pkgs.emacsGcc).emacsWithPackages;
+  emacsWithPackages =
+    (pkgs.emacsPackagesFor pkgs.emacsNativeComp).emacsWithPackages;
   myemacs = emacsWithPackages (epkgs: [ epkgs.melpaPackages.vterm ]);
 
   editorScript = { name ? "emacseditor", x11 ? false, extraArgs ? [ ] }:
