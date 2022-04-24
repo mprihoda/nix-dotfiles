@@ -5,8 +5,9 @@
 with lib;
 
 let
-  emacsWithPackages =
-    (pkgs.emacsPackagesFor pkgs.emacsNativeComp).emacsWithPackages;
+  pkg =
+    if pkgs.stdenv.isDarwin then pkgs.emacsNativeComp else pkgs.emacsPgtkGcc;
+  emacsWithPackages = (pkgs.emacsPackagesFor pkg).emacsWithPackages;
   myemacs = emacsWithPackages (epkgs: [ epkgs.melpaPackages.vterm ]);
 
   editorScript = { name ? "emacseditor", x11 ? false, extraArgs ? [ ] }:
