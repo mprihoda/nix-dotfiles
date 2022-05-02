@@ -48,5 +48,6 @@
     msmtp
     fontconfig
     ledger
+    ledger-autosync
   ];
 }
