@@ -34,7 +34,17 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory (expand-file-name "~/org/"))
+(setq org-directory (expand-file-name "~/org/")
+      org-agenda-files '("todo.org" "projects_active.org" "tech_support.org"))
+
+(defun org-agenda-focus-active() "Focus on todos for active projects."
+  (interactive)
+  (setq org-agenda-files '("todo.org" "projects_active.org" "tech_support.org")))
+
+(defun org-agenda-focus-all() "Focus on todos for all projects."
+  (interactive)
+  (setq org-agenda-files '("todo.org" "projects_active.org" "tech_support.org" "projects_backlog.org")))
+
 (setq org-roam-directory (expand-file-name "roam" org-directory)
       org-roam-dailies-directory "daily/"
       org-roam-v2-ack t)
@@ -214,7 +224,7 @@ returns the command to execute."
 
 (defun my/org-roam-visit-index ()
   (interactive)
-  (let* ((index-name "000 Index")
+  (let* ((index-name "Home")
          (index-node (org-roam-node-from-title-or-alias index-name)))
     (org-roam-node-visit index-node)))
 
