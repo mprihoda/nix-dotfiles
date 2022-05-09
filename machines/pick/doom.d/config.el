@@ -92,9 +92,11 @@
     (lsp-mode . lsp-lens-mode)
   :config
     (setq lsp-prefer-flymake nil)
-    (remove-hook 'lsp-completion-mode-hook '+lsp-init-company-backends-h))
-
-(after! lsp-mode)
+    (setq lsp-enable-file-watchers t
+          lsp-file-watch-threshold 4000)
+    (remove-hook 'lsp-completion-mode-hook '+lsp-init-company-backends-h)
+    ;; (setq lsp-java-workspace-dir (expand-file-name lsp-java-workspace-dir))
+    (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]out\\'"))
 
 ;;(use-package! lsp-ui
 ;;  :config (setq lsp-ui-doc-enable t
@@ -117,9 +119,6 @@
    minibuffer-local-completion-map)
   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
   (setq sbt:program-options '("-Dsbt.supershell=false" "-Dsbt.semanticdb=true")))
-
-(setq lsp-enable-file-watchers t
-      lsp-file-watch-threshold 4000)
 
 (setq projectile-project-search-path
       '("~/Devel/commercial/e-bs"
@@ -256,10 +255,6 @@
   (sql-set-product-feature 'mysql :prompt-regexp "[mM]y[sS][qQ][lL]\\( \\[.*?]\\)?>")
   (load-file (expand-file-name "sql-connections.el.gpg" doom-private-dir)))
 
-(after! lsp
-  ;; The java workspace path is not expanded in +lsp.el, should fix
-  (setq lsp-java-workspace-dir (expand-file-name lsp-java-workspace-dir)))
-
 ;; TODO: remove after update to check if it still causes problems with lsp xref
 ;; It reports errors (invalid handler) when visiting files in .jar directories
 ;; I could just remove the .jar from the pattern, but I don't think I'm going to miss it anytime soon
@@ -274,3 +269,5 @@
   (add-to-list 'forge-alist '("gitlab.e-bs.cz" "gitlab.e-bs.cz/api/v4" "gitlab.e-bs.cz" forge-gitlab-repository)))
 
 (add-to-list 'auto-mode-alist '("\\.sc\\'" . scala-mode))
+; (add-to-list 'default-frame-alist '(undecorated . t))
+(add-to-list 'default-frame-alist '(fullscreen . fullboth))
