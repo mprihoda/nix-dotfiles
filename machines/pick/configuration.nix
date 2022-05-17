@@ -23,7 +23,7 @@ in {
   networking = {
     enableIPv6 = false;
     hostName = "pick"; # Define your hostname.
-    extraHosts = "10.10.9.5 dig.iterative.works"; # Define dig via VPN
+    extraHosts = "10.10.9.4 dig.iterative.works"; # Define dig via VPN
     useDHCP = false;
     interfaces = {
       ens3 = {
@@ -105,7 +105,7 @@ in {
     sbt
     bloop
     coursier
-    nodejs-12_x
+    nodejs-14_x
     yarn
 
     # utitilies

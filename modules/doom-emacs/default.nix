@@ -6,7 +6,7 @@ with lib;
 
 let
   pkg =
-    if pkgs.stdenv.isDarwin then pkgs.emacsNativeComp else pkgs.emacsPgtkGcc;
+    if pkgs.stdenv.isDarwin then pkgs.emacsNativeComp else pkgs.emacsPgtkNativeComp;
   emacsWithPackages = (pkgs.emacsPackagesFor pkg).emacsWithPackages;
   myemacs = emacsWithPackages (epkgs: [ epkgs.melpaPackages.vterm ]);
 
