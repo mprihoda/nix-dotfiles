@@ -49,7 +49,8 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
-(unpin! lsp-metals)
+(unpin! lsp-metals scala-mode)
+(package! scala-mode :recipe (:repo "Kazark/emacs-scala-mode"))
 (package! fish-mode)
 (package! company-tabnine)
 (package! posframe)
