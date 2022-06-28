@@ -287,7 +287,7 @@ in {
 
   security.sudo.wheelNeedsPassword = false;
 
-  security.pki.certificateFiles = [ ./oper2.pem ];
+  security.pki.certificateFiles = [ ./oper2.pem ./internal_rca.pem ];
 
   security.acme.defaults.email = "michal@prihoda.net";
   security.acme.acceptTerms = true;
