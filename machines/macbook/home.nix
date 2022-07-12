@@ -37,7 +37,7 @@
     fish
     direnv
     mosh
-    eternal-terminal
+    #eternal-terminal
     coursier
     #ipfs
 
@@ -50,4 +50,5 @@
     ledger
     ledger-autosync
   ];
+  home.stateVersion = "22.11";
 }
