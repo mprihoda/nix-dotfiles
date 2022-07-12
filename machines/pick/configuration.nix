@@ -23,7 +23,6 @@ in {
   networking = {
     enableIPv6 = false;
     hostName = "pick"; # Define your hostname.
-    extraHosts = "10.10.9.4 dig.iterative.works"; # Define dig via VPN
     useDHCP = false;
     interfaces = {
       ens3 = {
