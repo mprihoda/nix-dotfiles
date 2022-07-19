@@ -1,5 +1,8 @@
 * Inbox
 ** TODO Add better unix tools as common modules for Mac and Linux
+** TODO use home-manager in user install instead of system install
+https://dzone.com/articles/nixos-home-manager-on-native-nix-flake-installatio
+https://github.com/mudrii/hmtst
 * Improvements
 ** DONE Move remote-notmuch to doom.d or as nix script
 [[file:~/.dotfiles/machines/macbook/doom.d/config.el::notmuch-command "~/.emacs.d/bin/remote-notmuch.sh"))]]

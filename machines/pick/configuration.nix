@@ -104,14 +104,14 @@ in {
     sbt
     bloop
     coursier
-    nodejs-14_x
+    nodejs-16_x
     yarn
 
     # utitilies
     inotify-tools
     httpie
     jq
-    git-town
+    # git-town
     htop
     fzf
     ripgrep
@@ -168,6 +168,8 @@ in {
   };
 
   services.eternal-terminal = { enable = true; };
+
+  services.vscode-server.enable = true;
 
   # Code server
   services.code-server = {

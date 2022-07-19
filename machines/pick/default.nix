@@ -1,4 +1,5 @@
-{ home-manager, sops-nix, nix-doom-emacs, emacs-overlay, doom-emacs }:
+{ home-manager, sops-nix, nix-doom-emacs, emacs-overlay, doom-emacs
+, vscode-server }:
 
 {
   system = "x86_64-linux";
@@ -11,6 +12,7 @@
     })
     home-manager.nixosModules.home-manager
     sops-nix.nixosModules.sops
+    vscode-server.nixosModule
     ./configuration.nix
     ./cachix.nix
     ./modules/mph-mail

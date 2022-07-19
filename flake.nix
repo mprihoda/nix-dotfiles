@@ -15,6 +15,8 @@
 
     doom-emacs.url = "github:hlissner/doom-emacs";
     doom-emacs.flake = false;
+
+    vscode-server.url = "github:msteen/nixos-vscode-server";
   };
 
   outputs = { self, nixpkgs, darwin, ... }@inputs: {
@@ -23,7 +25,8 @@
     nixosConfigurations = {
       pick = nixpkgs.lib.nixosSystem (import ./machines/pick {
         inherit (inputs)
-          home-manager sops-nix nix-doom-emacs emacs-overlay doom-emacs;
+          home-manager sops-nix nix-doom-emacs emacs-overlay doom-emacs
+          vscode-server;
       });
     };
 
