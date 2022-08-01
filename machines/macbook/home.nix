@@ -22,7 +22,7 @@
     pass
 
     # utitilies
-    # TODO: temporary disabled, build failing in tests/test_plugins_cli.py
+    terminal-notifier
     httpie
     jq
     # git-town

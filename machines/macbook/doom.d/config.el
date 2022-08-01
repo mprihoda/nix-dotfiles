@@ -268,6 +268,8 @@ returns the command to execute."
   (setq notmuch-fcc-dirs "fastmail/Sent +sent"
         notmuch-command (expand-file-name "~/.nix-profile/bin/remote-notmuch.sh")))
 
+(setq alert-default-style 'notifier)
+
 ; Fails with Text is read-only for some reason
 ;(after! plantuml-mode
 ;  (setq plantuml-default-exec-mode 'server
