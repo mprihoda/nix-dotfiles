@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 {
-  imports = [ ./modules/vscode ./modules/remote-notmuch ../../modules/neovim ];
+  imports = [ ./modules/remote-notmuch ../../modules/neovim ];
   home.packages = with pkgs; [
     # system mgmt
     docker
@@ -25,7 +25,7 @@
     # TODO: temporary disabled, build failing in tests/test_plugins_cli.py
     httpie
     jq
-    git-town
+    # git-town
     htop
     fzf
     ripgrep
