@@ -50,7 +50,7 @@
 ;(unpin! t)
 
 (unpin! sbt-mode)
-(unpin! scala-mode)
+(package! scala-mode :recipe (:repo "Kazark/emacs-scala-mode" :branch "scala3"))
 (unpin! lsp-metals)
 (package! ob-ammonite)
 (package! fish-mode)
@@ -59,3 +59,5 @@
 (package! dap-mode)
 (package! plz :recipe (:host github :repo "alphapapa/plz.el"))
 (package! ement :recipe (:host github :repo "alphapapa/ement.el"))
+(package! copilot
+  :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))

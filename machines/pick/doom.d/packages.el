@@ -50,7 +50,7 @@
 ;(unpin! t)
 
 (unpin! lsp-metals scala-mode)
-(package! scala-mode :recipe (:repo "Kazark/emacs-scala-mode"))
+(package! scala-mode :recipe (:repo "Kazark/emacs-scala-mode" :branch "scala3"))
 (package! fish-mode)
 (package! company-tabnine)
 (package! posframe)

@@ -354,3 +354,22 @@ returns the command to execute."
 
 (after! scala-mode
   (add-to-list 'auto-mode-alist '("\\.sc\\'" . scala-mode)))
+
+;; Github Copilot
+;; accept completion from copilot and fallback to company
+(defun my-tab ()
+  (interactive)
+  (or (copilot-accept-completion)
+      (company-indent-or-complete-common nil)))
+
+(use-package! copilot
+  :hook (prog-mode . copilot-mode)
+  :bind (("C-TAB" . 'copilot-accept-completion-by-word)
+         ("C-<tab>" . 'copilot-accept-completion-by-word)
+         :map company-active-map
+         ("<tab>" . 'my-tab)
+         ("TAB" . 'my-tab)
+         :map company-mode-map
+         ("<tab>" . 'my-tab)
+         ("TAB" . 'my-tab)))
+;; Github Copilot
