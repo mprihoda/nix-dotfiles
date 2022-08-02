@@ -49,9 +49,8 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
-(unpin! sbt-mode)
+(unpin! lsp-metals scala-mode sbt-mode)
 (package! scala-mode :recipe (:repo "Kazark/emacs-scala-mode" :branch "scala3"))
-(unpin! lsp-metals)
 (package! ob-ammonite)
 (package! fish-mode)
 (package! company-tabnine)
