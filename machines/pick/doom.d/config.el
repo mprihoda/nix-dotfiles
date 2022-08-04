@@ -103,6 +103,7 @@
 ;;                lsp-ui-sideline-show-hover t))
 
 (use-package! lsp-metals
+  :after lsp-mode
   :config (setq lsp-metals-treeview-show-when-views-received nil
                 lsp-metals-show-implicit-arguments nil
                 lsp-metals-show-inferred-type nil))
