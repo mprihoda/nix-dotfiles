@@ -44,6 +44,7 @@
     # document tools
     pandoc
     texlive.combined.scheme-full
+    texlab
 
     msmtp
     fontconfig
