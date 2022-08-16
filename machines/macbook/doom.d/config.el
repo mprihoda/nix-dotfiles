@@ -350,6 +350,9 @@ returns the command to execute."
  ;; The java workspace path is not expanded in +lsp.el, should fix
  (setq lsp-java-workspace-dir (expand-file-name lsp-java-workspace-dir)))
 
+(after! forge
+  (add-to-list 'forge-alist '("gitlab.e-bs.cz" "gitlab.e-bs.cz/api/v4" "gitlab.e-bs.cz" forge-gitlab-repository)))
+
 (use-package! ob-ammonite :after org)
 
 (after! scala-mode
@@ -362,14 +365,14 @@ returns the command to execute."
   (or (copilot-accept-completion)
       (company-indent-or-complete-common nil)))
 
-(use-package! copilot
-  :hook (scala-mode . copilot-mode)
-  :bind (("C-TAB" . 'copilot-accept-completion-by-word)
-         ("C-<tab>" . 'copilot-accept-completion-by-word)
-         :map company-active-map
-         ("<tab>" . 'my-tab)
-         ("TAB" . 'my-tab)
-         :map company-mode-map
-         ("<tab>" . 'my-tab)
-         ("TAB" . 'my-tab)))
+;; (use-package! copilot
+;;   :hook (scala-mode . copilot-mode)
+;;   :bind (("C-TAB" . 'copilot-accept-completion-by-word)
+;;          ("C-<tab>" . 'copilot-accept-completion-by-word)
+;;          :map company-active-map
+;;          ("<tab>" . 'my-tab)
+;;          ("TAB" . 'my-tab)
+;;          :map company-mode-map
+;;          ("<tab>" . 'my-tab)
+;;          ("TAB" . 'my-tab)))
 ;; Github Copilot
