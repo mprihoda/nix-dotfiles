@@ -99,6 +99,17 @@
         };
         userName = "mph";
       };
+      loginebs = {
+        smtp.host = "login.cz";
+        msmtp = {
+          enable = true;
+          extraConfig = {
+            from = "mph@e-bs.cz";
+            passwordeval = "cat /run/secrets/mph/mail/login/smtp";
+          };
+        };
+        userName = "mph";
+      };
     };
 
     accounts.email.maildirBasePath = "mail";
