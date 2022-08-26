@@ -189,4 +189,7 @@
 
        :config
        ;;literate
-       (default +bindings +smartparens))
+       (default +bindings +smartparens)
+       my-dev
+       my-system
+       my-mail)

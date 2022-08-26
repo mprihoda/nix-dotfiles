@@ -33,19 +33,6 @@
 ;;(setq doom-theme 'doom-gruvbox)
 (setq doom-theme 'doom-gruvbox-light)
 
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(setq org-directory (expand-file-name "~/org/"))
-(setq org-roam-directory (expand-file-name "roam" org-directory)
-      ;;      org-roam-dailies-directory "journal/"
-      org-roam-link-auto-replace t
-      org-roam-completion-everywhere nil)
-;;(setq org-journal-dir (expand-file-name "journal" org-roam-directory)
-;;      org-journal-file-format "%Y-%m-%d.org"
-;;      org-journal-file-header "#+title: %Y-%m-%d"
-;;      org-journal-date-format "%d.%m.%Y")
-(setq deft-directory org-roam-directory)
-
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
@@ -70,67 +57,7 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
-;; (use-package! company-tabnine)
 ;; taken from issue in Doom: https://github.com/hlissner/doom-emacs/issues/1268
-(use-package! company-tabnine
-  :after company
-  :config
-  (cl-pushnew 'company-tabnine (default-value 'company-backends)))
-
-(after! company
-  (set-company-backend! 'prog-mode 'company-tabnine 'company-capf 'company-yasnippet)
-  ;;  (setq +lsp-company-backends '(company-capf company-yasnippet :separate company-tabnine))
-  (setq company-idle-delay 0.5
-        company-show-quick-access t))
-
-(use-package! lsp-mode
-  ;; Optional - enable lsp-mode automatically in scala files
-  ;; mph: scala-mode's lsp is hooked in scala's config.el
-  ;; TODO: investigate lsp-lens-mode
-  :hook
-  (scala-mode . lsp)
-  (lsp-mode . lsp-lens-mode)
-  :config
-  (setq lsp-prefer-flymake nil)
-  (setq lsp-enable-file-watchers t
-        lsp-file-watch-threshold 4000)
-  (remove-hook 'lsp-completion-mode-hook '+lsp-init-company-backends-h)
-  ;; (setq lsp-java-workspace-dir (expand-file-name lsp-java-workspace-dir))
-  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]out\\'"))
-
-;;(use-package! lsp-ui
-;;  :config (setq lsp-ui-doc-enable t
-;;                lsp-ui-sideline-show-hover t))
-
-(use-package! lsp-metals
-  :after lsp-mode
-  :config (setq lsp-metals-treeview-show-when-views-received nil
-                lsp-metals-show-implicit-arguments nil
-                lsp-metals-show-inferred-type nil))
-
-;; Enable sbt mode for executing sbt commands
-(use-package! sbt-mode
-  :commands sbt-start sbt-command
-  :config
-                                        ; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
-  ;; allows using SPACE when in the minibuffer
-  (substitute-key-definition
-   'minibuffer-complete-word
-   'self-insert-command
-   minibuffer-local-completion-map)
-  ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
-  (setq sbt:program-options '("-Dsbt.supershell=false" "-Dsbt.semanticdb=true")))
-
-(setq projectile-project-search-path
-      '("~/Devel/commercial/e-bs"
-        "~/Devel/commercial/eidentity"
-        "~/Devel/commercial/fiftyforms"
-        "~/Devel/commercial/iw"
-        "~/Devel/personal"))
-
-(after! plantuml-mode
-  (setq plantuml-default-exec-mode 'server
-        plantuml-server-url "http://localhost:8080/"))
 
 ;; Call manually in emacs daemon, so that it does not get overriden each time in new emacs
 ;;(use-package! pinentry
@@ -155,146 +82,18 @@
 ;;      (xterm-title-mode 1)))
 ;;(add-hook! 'server-after-make-frame-hook 'my-init-terminal-title)
 
-;; Try to set this after notmuch loads, otherwise it stays nil
-(after! notmuch
-  (setq
-   notmuch-fcc-dirs "fastmail/Sent +sent"))
-
 (after! evil-escape
   (setq evil-escape-key-sequence "fd"))
-
-(after! org-capture
-  (setq org-capture-templates
-        '(("t" "Personal todo" entry
-           (file+headline +org-capture-todo-file "Inbox")
-           "* TODO %?\n%i\n%a" :prepend t)
-          ("n" "Personal notes" entry
-           (file+headline +org-capture-notes-file "Inbox")
-           "* %u %?\n%i\n%a" :prepend t)
-          ("j" "Journal" entry
-           (file+olp+datetree +org-capture-journal-file)
-           "* %U %?\n%i\n%a" :prepend t)
-
-          ;; Will use {project-root}/{todo,notes,changelog}.org, unless a
-          ;; {todo,notes,changelog}.org file is found in a parent directory.
-          ;; Uses the basename from `+org-capture-todo-file',
-          ;; `+org-capture-changelog-file' and `+org-capture-notes-file'.
-          ("p" "Templates for projects")
-          ("pt" "Project-local todo" entry  ; {project-root}/todo.org
-           (file+headline +org-capture-project-todo-file "Inbox")
-           "* TODO %?\n%i\n%a" :prepend t)
-          ("pn" "Project-local notes" entry  ; {project-root}/notes.org
-           (file+headline +org-capture-project-notes-file "Inbox")
-           "* %U %?\n%i\n%a" :prepend t)
-          ("pc" "Project-local changelog" entry  ; {project-root}/changelog.org
-           (file+headline +org-capture-project-changelog-file "Unreleased")
-           "* %U %?\n%i\n%a" :prepend t)
-
-          ;; Will use {org-directory}/{+org-capture-projects-file} and store
-          ;; these under {ProjectName}/{Tasks,Notes,Changelog} headings. They
-          ;; support `:parents' to specify what headings to put them under, e.g.
-          ;; :parents ("Projects")
-          ("o" "Centralized templates for projects")
-          ("ot" "Project todo" entry
-           (function +org-capture-central-project-todo-file)
-           "* TODO %?\n %i\n %a"
-           :heading "Tasks"
-           :prepend nil)
-          ("on" "Project notes" entry
-           (function +org-capture-central-project-notes-file)
-           "* %U %?\n %i\n %a"
-           :heading "Notes"
-           :prepend t)
-          ("oc" "Project changelog" entry
-           (function +org-capture-central-project-changelog-file)
-           "* %U %?\n %i\n %a"
-           :heading "Changelog"
-           :prepend t))))
-
-(after! org-roam
-  (setq org-roam-capture-templates '(
-                                     ("d" "default" plain #'org-roam-capture--get-point
-                                      "%?"
-                                      :file-name "%<%Y%m%d%H%M%S>-${slug}"
-                                      :head "#+title: ${title}\n"
-                                      :unnarrowed t)
-                                     ("c" "call" entry #'org-roam--capture-get-point
-                                      "* ${title}\n\n|Projekt|%?|\n|Účastníci||\n|Issue||\n|Datum||\n** Agenda\n*** Cíl schůzky\n** Poznámky a úkoly"
-                                      :file-name "%<%Y%m%d%H%M%S>-${slug}"
-                                      :head "#+title: ${title}\n"
-                                      :unnarrowed t
-                                      )
-                                     ("i" "issue" entry #'org-roam--capture-get-point
-                                      "* ${title}\n\n|Projekt||\n|Start||\n|Deadline||\n|Done||\n"
-                                      :file-name "%<%Y%m%d%H%M%S>-${slug}"
-                                      :head "#+title: ${title}\n"
-                                      :unnarrowed t
-                                      )
-                                     )))
-
-;; Metals
-(after! lsp-metals
-  (setq lsp-ui-sideline-diagnostic-max-lines 5)
-  (defvar lsp-metals-map (make-sparse-keymap) "A map for metals keybindings")
-  (map! :map lsp-metals-map
-        :mode scala-mode
-        :localleader
-        :desc "Toggle inferred types" "t" #'lsp-metals-toggle-show-inferred-type
-        :desc "Toggle implicit params" "p" #'lsp-metals-toggle-show-implicit-arguments
-        :desc "Toggle implicit conversions" "c" #'lsp-metals-toggle-show-implicit-conversions
-        :desc "Toggle show super" "s" #'lsp-metals-toggle-show-super-method-lenses
-        :desc "Build" "l" #'(lambda () "Build using sbt" (interactive) (sbt-command (if (boundp 'my/sbt-build-command) my/sbt-build-command "compile")))
-        :desc "SBT" "b" #'sbt-start)
-  )
 
 ;; gnupg
 (after! epa
   (setq epg-pinentry-mode nil)) ;; I don't want Emacs to handle the pinentry, remote agent does that.
 
-;;SQL
-(after! sql
-  (sql-set-product-feature 'mysql :prompt-regexp "[mM]y[sS][qQ][lL]\\( \\[.*?]\\)?>")
-  (load-file (expand-file-name "sql-connections.el.gpg" doom-private-dir)))
-
 ;; TODO: remove after update to check if it still causes problems with lsp xref
 ;; It reports errors (invalid handler) when visiting files in .jar directories
 ;; I could just remove the .jar from the pattern, but I don't think I'm going to miss it anytime soon
 ;; TODO: just filter out, instead of setting
-(setq tramp-archive-suffixes
-      '("7z" "apk" "ar" "cab" "CAB" "cpio" "deb" "depot" "exe" "iso" "lzh" "LZH" "msu" "MSU" "mtree" "odb" "odf" "odg" "odp" "ods" "odt" "pax" "rar" "rpm" "shar" "tar" "tbz" "tgz" "tlz" "txz" "tzst" "warc" "xar" "xpi" "xps" "zip" "ZIP"))
-
 (after! tramp
-  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
-
-(after! forge
-  (add-to-list 'forge-alist '("gitlab.e-bs.cz" "gitlab.e-bs.cz/api/v4" "gitlab.e-bs.cz" forge-gitlab-repository)))
-
-(add-to-list 'auto-mode-alist '("\\.sc\\'" . scala-mode))
-                                        ; (add-to-list 'default-frame-alist '(undecorated . t))
-(add-to-list 'default-frame-alist '(fullscreen . fullboth))
-
-;; Github Copilot
-;; accept completion from copilot and fallback to company
-(defun my-tab ()
-  (interactive)
-  (or (copilot-accept-completion)
-      (company-indent-or-complete-common nil)))
-
-(use-package! copilot
-  :hook (prog-mode . copilot-mode)
-  :config
-  (map!
-   (:when (modulep! :completion company))
-   :mode prog-mode
-   ;;"C-TAB" 'copilot-accept-completion-by-word
-   ;;"C-<tab>" 'copilot-accept-completion-by-word
-   :map company-active-map
-   "<tab>" 'my-tab
-   "TAB" 'my-tab
-   :map company-mode-map
-   "<tab>" 'my-tab
-   "TAB" 'my-tab))
-;; Github Copilot
-
-;; Make SBT a popup
-(set-popup-rule! "^\\*sbt" :select t :side 'right :width 80 :ttl nil)
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+  (setq tramp-archive-suffixes
+      '("7z" "apk" "ar" "cab" "CAB" "cpio" "deb" "depot" "exe" "iso" "lzh" "LZH" "msu" "MSU" "mtree" "odb" "odf" "odg" "odp" "ods" "odt" "pax" "rar" "rpm" "shar" "tar" "tbz" "tgz" "tlz" "txz" "tzst" "warc" "xar" "xpi" "xps" "zip" "ZIP")))

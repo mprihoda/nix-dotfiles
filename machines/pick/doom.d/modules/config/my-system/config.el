@@ -1,5 +1,5 @@
 ;;; config/my-system/config.el -*- lexical-binding: t; -*-
-;;;
+
 (defun org-agenda-focus-active() "Focus on todos for active projects."
   (interactive)
   (setq org-agenda-files '("inbox.org" "todo.org" "projects_active.org" "tech_support.org")))
@@ -10,13 +10,16 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory (expand-file-name "~/org/")
-      org-agenda-files '("inbox.org" "todo.org" "projects_active.org" "tech_support.org")
-      org-roam-directory (expand-file-name "roam" org-directory)
-      org-roam-dailies-directory "daily/"
-      org-roam-v2-ack t)
+(setq org-directory (expand-file-name "~/org/"))
+(setq org-roam-directory (expand-file-name "roam" org-directory)
+      ;;      org-roam-dailies-directory "journal/"
+      org-roam-link-auto-replace t
+      org-roam-completion-everywhere nil)
+;;(setq org-journal-dir (expand-file-name "journal" org-roam-directory)
+;;      org-journal-file-format "%Y-%m-%d.org"
+;;      org-journal-file-header "#+title: %Y-%m-%d"
+;;      org-journal-date-format "%d.%m.%Y")
 (setq deft-directory org-roam-directory)
-(setq org-logseq-dir (expand-file-name "~/notes/"))
 
 (defun my/org-roam-visit-index ()
   (interactive)
