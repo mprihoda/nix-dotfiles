@@ -37,7 +37,7 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory (expand-file-name "~/org/"))
 (setq org-roam-directory (expand-file-name "roam" org-directory)
-;;      org-roam-dailies-directory "journal/"
+      ;;      org-roam-dailies-directory "journal/"
       org-roam-link-auto-replace t
       org-roam-completion-everywhere nil)
 ;;(setq org-journal-dir (expand-file-name "journal" org-roam-directory)
@@ -79,7 +79,7 @@
 
 (after! company
   (set-company-backend! 'prog-mode 'company-tabnine 'company-capf 'company-yasnippet)
-;;  (setq +lsp-company-backends '(company-capf company-yasnippet :separate company-tabnine))
+  ;;  (setq +lsp-company-backends '(company-capf company-yasnippet :separate company-tabnine))
   (setq company-idle-delay 0.5
         company-show-quick-access t))
 
@@ -88,15 +88,15 @@
   ;; mph: scala-mode's lsp is hooked in scala's config.el
   ;; TODO: investigate lsp-lens-mode
   :hook
-    (scala-mode . lsp)
-    (lsp-mode . lsp-lens-mode)
+  (scala-mode . lsp)
+  (lsp-mode . lsp-lens-mode)
   :config
-    (setq lsp-prefer-flymake nil)
-    (setq lsp-enable-file-watchers t
-          lsp-file-watch-threshold 4000)
-    (remove-hook 'lsp-completion-mode-hook '+lsp-init-company-backends-h)
-    ;; (setq lsp-java-workspace-dir (expand-file-name lsp-java-workspace-dir))
-    (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]out\\'"))
+  (setq lsp-prefer-flymake nil)
+  (setq lsp-enable-file-watchers t
+        lsp-file-watch-threshold 4000)
+  (remove-hook 'lsp-completion-mode-hook '+lsp-init-company-backends-h)
+  ;; (setq lsp-java-workspace-dir (expand-file-name lsp-java-workspace-dir))
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]out\\'"))
 
 ;;(use-package! lsp-ui
 ;;  :config (setq lsp-ui-doc-enable t
@@ -264,13 +264,13 @@
       '("7z" "apk" "ar" "cab" "CAB" "cpio" "deb" "depot" "exe" "iso" "lzh" "LZH" "msu" "MSU" "mtree" "odb" "odf" "odg" "odp" "ods" "odt" "pax" "rar" "rpm" "shar" "tar" "tbz" "tgz" "tlz" "txz" "tzst" "warc" "xar" "xpi" "xps" "zip" "ZIP"))
 
 (after! tramp
-      (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 (after! forge
   (add-to-list 'forge-alist '("gitlab.e-bs.cz" "gitlab.e-bs.cz/api/v4" "gitlab.e-bs.cz" forge-gitlab-repository)))
 
 (add-to-list 'auto-mode-alist '("\\.sc\\'" . scala-mode))
-; (add-to-list 'default-frame-alist '(undecorated . t))
+                                        ; (add-to-list 'default-frame-alist '(undecorated . t))
 (add-to-list 'default-frame-alist '(fullscreen . fullboth))
 
 ;; Github Copilot
@@ -282,12 +282,19 @@
 
 (use-package! copilot
   :hook (prog-mode . copilot-mode)
-  :bind (("C-TAB" . 'copilot-accept-completion-by-word)
-         ("C-<tab>" . 'copilot-accept-completion-by-word)
-         :map company-active-map
-         ("<tab>" . 'my-tab)
-         ("TAB" . 'my-tab)
-         :map company-mode-map
-         ("<tab>" . 'my-tab)
-         ("TAB" . 'my-tab)))
+  :config
+  (map!
+   (:when (modulep! :completion company))
+   :mode prog-mode
+   ;;"C-TAB" 'copilot-accept-completion-by-word
+   ;;"C-<tab>" 'copilot-accept-completion-by-word
+   :map company-active-map
+   "<tab>" 'my-tab
+   "TAB" 'my-tab
+   :map company-mode-map
+   "<tab>" 'my-tab
+   "TAB" 'my-tab))
 ;; Github Copilot
+
+;; Make SBT a popup
+(set-popup-rule! "^\\*sbt" :select t :side 'right :width 80 :ttl nil)
