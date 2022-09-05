@@ -223,6 +223,9 @@ in {
     package = pkgs.jre;
   };
 
+  # For tailscale
+  networking.firewall.checkReversePath = "loose";
+
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [ 80 443 9001 2022 ];
   networking.firewall.trustedInterfaces = [ "tailscale0" ];
