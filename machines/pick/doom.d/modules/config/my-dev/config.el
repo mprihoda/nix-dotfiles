@@ -104,9 +104,11 @@
    :map company-active-map
    "<tab>" 'my-tab
    "TAB" 'my-tab
+   "M-]" 'copilot-accept-completion-by-word
    :map company-mode-map
    "<tab>" 'my-tab
-   "TAB" 'my-tab))
+   "TAB" 'my-tab
+   "M-]" 'copilot-accept-completion-by-word))
 ;; Github Copilot
 
 ;;SQL
