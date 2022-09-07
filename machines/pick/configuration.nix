@@ -18,7 +18,11 @@ in {
     device = "/dev/vda";
   };
 
-  boot.kernel.sysctl = { "fs.inotify.max_user_watches" = 524288; };
+  boot.kernel.sysctl = {
+    "fs.inotify.max_user_watches" = 524288;
+    "net.ipv4.ip_forward" = 1;
+    "net.ipv6.conf.all.forwarding" = 1;
+  };
 
   networking = {
     enableIPv6 = false;
