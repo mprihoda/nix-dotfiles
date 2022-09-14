@@ -29,7 +29,7 @@ let
     in pkgs.writeScript "emacs-daemon" ''
       #!${pkgs.zsh}/bin/zsh
       source ~/.zshrc
-      export PATH=$PATH:${lib.makeBinPath [ pkgs.git pkgs.sqlite pkgs.unzip ]}
+      export PATH=$PATH:${lib.makeBinPath [ pkgs.bash pkgs.git pkgs.sqlite pkgs.unzip ]}
       if [ ! -d $HOME/.emacs.d/.git ]; then
         mkdir -p $HOME/.emacs.d
         git -C $HOME/.emacs.d init
