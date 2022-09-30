@@ -115,3 +115,5 @@
 (after! sql
   (sql-set-product-feature 'mysql :prompt-regexp "[mM]y[sS][qQ][lL]\\( \\[.*?]\\)?>")
   (load-file (expand-file-name "sql-connections.el.gpg" doom-private-dir)))
+
+(add-to-list 'auto-mode-alist '("\\.Dockerfile\\'" . dockerfile-mode))
