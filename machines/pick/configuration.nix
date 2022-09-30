@@ -29,7 +29,7 @@ in {
     hostName = "pick"; # Define your hostname.
     useDHCP = false;
     interfaces = {
-      ens3 = {
+      ens18 = {
         useDHCP = false;
         ipv4.addresses = [
           {
