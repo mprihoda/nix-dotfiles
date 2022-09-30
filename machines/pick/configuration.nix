@@ -75,10 +75,8 @@ in {
 
   # Install the flakes edition
   nix = {
-    package = pkgs.nixFlakes;
     # Enable the nix 2.0 CLI and flakes support feature-flags
     extraOptions = ''
-      experimental-features = nix-command flakes
       keep-outputs = true
       keep-derivations = true
     '';
@@ -98,7 +96,7 @@ in {
     ansible
 
     # SQL
-    mysql-client
+    mariadb-client
 
     # language support
     jre

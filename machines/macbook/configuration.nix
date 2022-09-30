@@ -20,10 +20,6 @@
 
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
-  # nix.package = pkgs.nix;
-  nix.package = pkgs.nixFlakes; # NOTE: EXPERIMENTAL.
-  nix.extraOptions = lib.optionalString (config.nix.package == pkgs.nixFlakes)
-    "experimental-features = nix-command flakes";
 
   environment.etc."msmtprc".text = ''
     account default

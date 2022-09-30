@@ -11,7 +11,7 @@
     ansible
 
     # SQL
-    mysql-client
+    mariadb-client
 
     # language support
     adoptopenjdk-bin
