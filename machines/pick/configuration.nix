@@ -3,10 +3,7 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 { config, pkgs, lib, ... }:
 
-let
-  oper2 = ./oper2.pem;
-  int_rca = ./internal_rca.pem;
-in {
+{
   imports = [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./cachix.nix
@@ -62,14 +59,14 @@ in {
   # environment.systemPackages = with pkgs; [
   #   wget vim
   # ];
-  nixpkgs.config.packageOverrides = pkgs: {
-    jre = pkgs.adoptopenjdk-openj9-bin-11; # .overrideAttrs (attrs: {
-    #      installPhase = ''
-    #       ${attrs.installPhase}
-    #       $out/bin/keytool -importcert -trustcacerts -noprompt -alias oper2 -cacerts -storepass changeit -file ${oper2}
-    #      '';
-    #    });
-  };
+  # nixpkgs.config.packageOverrides = pkgs: {
+  #  jre = pkgs.adoptopenjdk-openj9-bin-11; # .overrideAttrs (attrs: {
+  #      installPhase = ''
+  #       ${attrs.installPhase}
+  #       $out/bin/keytool -importcert -trustcacerts -noprompt -alias oper2 -cacerts -storepass changeit -file ${oper2}
+  #      '';
+  #    });
+  #};
 
   nixpkgs.config.allowUnfree = true;
 
@@ -293,7 +290,7 @@ in {
 
   security.sudo.wheelNeedsPassword = false;
 
-  security.pki.certificateFiles = [ ./oper2.pem ./internal_rca.pem ];
+  # security.pki.certificateFiles = [ ./oper2.pem ./internal_rca.pem ];
 
   security.acme.defaults.email = "michal@prihoda.net";
   security.acme.acceptTerms = true;

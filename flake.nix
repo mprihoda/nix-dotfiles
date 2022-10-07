@@ -17,6 +17,7 @@
     doom-emacs.flake = false;
 
     vscode-server.url = "github:msteen/nixos-vscode-server";
+    eid-pki.url = "git+https://gitlab.e-bs.cz/mph/eid-nix-pki.git";
   };
 
   outputs = { self, nixpkgs, darwin, ... }@inputs: {
@@ -26,7 +27,7 @@
       pick = nixpkgs.lib.nixosSystem (import ./machines/pick {
         inherit (inputs)
           home-manager sops-nix nix-doom-emacs emacs-overlay doom-emacs
-          vscode-server;
+          vscode-server eid-pki;
       });
     };
 
