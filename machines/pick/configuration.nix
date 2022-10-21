@@ -172,7 +172,7 @@
 
   # Code server
   services.code-server = {
-    enable = true;
+    enable = false;
     user = "mph";
     group = "users";
     hashedPassword =
