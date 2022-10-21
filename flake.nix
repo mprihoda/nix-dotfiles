@@ -1,6 +1,8 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    # Pin because of broken darwin-manual, remove after https://github.com/LnL7/nix-darwin/issues/551
+    # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=31d567846255e122846548255101980162bbf641";
     home-manager = {
       url = "github:rycee/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -17,7 +19,7 @@
     doom-emacs.flake = false;
 
     vscode-server.url = "github:msteen/nixos-vscode-server";
-    eid-pki.url = "git+https://gitlab.e-bs.cz/mph/eid-nix-pki.git";
+    eid-pki.url = "git+https://gitlab.e-bs.cz/mph/eid-nix-pki.git?ref=main";
   };
 
   outputs = { self, nixpkgs, darwin, ... }@inputs: {

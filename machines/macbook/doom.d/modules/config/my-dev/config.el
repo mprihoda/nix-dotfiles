@@ -13,49 +13,29 @@
 
 (after! company
   (set-company-backend! 'prog-mode 'company-tabnine 'company-capf 'company-yasnippet)
-  (setq company-idle-delay 0.5
+  ;; Do not start the company mode automatically, it clashes a bit with copilot
+  (setq company-idle-delay nil
         company-show-quick-access t))
 
 (use-package! lsp-mode
   ;; Optional - enable lsp-mode automatically in scala files
   ;; mph: scala-mode's lsp is hooked in scala's config.el
-  ;; TODO: investigate lsp-lens-mode
   :defer
   :hook
-    (scala-mode . lsp)
-    (lsp-mode . lsp-lens-mode)
+  (scala-mode . lsp)
+  (lsp-mode . lsp-lens-mode)
   :config
-    (setq lsp-prefer-flymake nil)
-    (remove-hook 'lsp-completion-mode-hook '+lsp-init-company-backends-h)
-    (setq gc-cons-threshold 100000000) ;; 100mb
-    (setq read-process-output-max (* 1024 1024)) ;; 1mb
-    (setq lsp-enable-file-watchers t
-          lsp-file-watch-threshold 4000)
-    ;; The java workspace path is not expanded in +lsp.el, should fix
-    (setq lsp-java-workspace-dir (expand-file-name lsp-java-workspace-dir)))
+  (setq lsp-prefer-flymake nil)
+  (setq lsp-enable-file-watchers t
+        lsp-file-watch-threshold 4000)
+  (remove-hook 'lsp-completion-mode-hook '+lsp-init-company-backends-h)
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]out\\'"))
 
-(use-package! sbt-mode
-  :commands sbt-start sbt-command
-  :config
-  ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
-  ;; allows using SPACE when in the minibuffer
-  (substitute-key-definition
-   'minibuffer-complete-word
-   'self-insert-command
-   minibuffer-local-completion-map)
-  ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
-  (setq sbt:program-options '("-Dsbt.supershell=false" "-Dsbt.semanticdb=true")))
-
-; Fails with Text is read-only for some reason
-;(after! plantuml-mode
-;  (setq plantuml-default-exec-mode 'server
-;        plantuml-server-url "http://pick.iterative.works:18888/plantuml"))
-
-(after! plantuml-mode
-  (setq plantuml-default-exec-mode 'jar
-        plantuml-jar-args '("-charset" "UTF-8")
-        plantuml-java-args '("-Djava.awt.headless=true" "-jar" "--illegal-access=deny" "-Dapple.awt.UIElement=true")))
-
+(use-package! lsp-metals
+  :after lsp-mode
+  :config (setq lsp-metals-treeview-show-when-views-received nil
+                lsp-metals-show-implicit-arguments nil
+                lsp-metals-show-inferred-type nil))
 ;; Metals
 (after! lsp-metals
   (setq lsp-ui-sideline-diagnostic-max-lines 5)
@@ -71,13 +51,30 @@
         :desc "SBT" "b" #'sbt-start)
   )
 
+;; Enable sbt mode for executing sbt commands
+(use-package! sbt-mode
+  :commands sbt-start sbt-command
+  :config
+  ; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+  ;; allows using SPACE when in the minibuffer
+  (substitute-key-definition
+   'minibuffer-complete-word
+   'self-insert-command
+   minibuffer-local-completion-map)
+  ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+  (setq sbt:program-options '("-Dsbt.supershell=false" "-Dsbt.semanticdb=true")))
+
+;; Do not use company mode in sbt buffers
+(add-to-list 'company-global-modes 'sbt-mode t)
+
+(add-to-list 'auto-mode-alist '("\\.sc\\'" . scala-mode))
+(add-to-list 'auto-mode-alist '("\\.Dockerfile\\'" . dockerfile-mode))
+
+;; Make SBT a popup
+(set-popup-rule! "^\\*sbt" :select t :side 'right :width 80 :ttl nil)
+
 (after! forge
   (add-to-list 'forge-alist '("gitlab.e-bs.cz" "gitlab.e-bs.cz/api/v4" "gitlab.e-bs.cz" forge-gitlab-repository)))
-
-(use-package! ob-ammonite :after org)
-
-(after! scala-mode
-  (add-to-list 'auto-mode-alist '("\\.sc\\'" . scala-mode)))
 
 ;; Github Copilot
 ;; accept completion from copilot and fallback to company
@@ -86,14 +83,18 @@
   (or (copilot-accept-completion)
       (company-indent-or-complete-common nil)))
 
-;; (use-package! copilot
-;;   :hook (scala-mode . copilot-mode)
-;;   :bind (("C-TAB" . 'copilot-accept-completion-by-word)
-;;          ("C-<tab>" . 'copilot-accept-completion-by-word)
-;;          :map company-active-map
-;;          ("<tab>" . 'my-tab)
-;;          ("TAB" . 'my-tab)
-;;          :map company-mode-map
-;;          ("<tab>" . 'my-tab)
-;;          ("TAB" . 'my-tab)))
+(use-package! copilot
+  :hook (prog-mode . copilot-mode)
+  :config
+  (map!
+   :mode prog-mode
+   "M-]" 'copilot-accept-completion-by-word
+   "M-n" 'copilot-next-completion
+   "M-RET" 'copilot-accept-completion
+   ))
 ;; Github Copilot
+
+;;SQL
+(after! sql
+  (sql-set-product-feature 'mysql :prompt-regexp "[mM]y[sS][qQ][lL]\\( \\[.*?]\\)?>")
+  (load-file (expand-file-name "sql-connections.el.gpg" doom-private-dir)))

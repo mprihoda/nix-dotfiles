@@ -54,6 +54,7 @@
 (package! ob-ammonite)
 (package! fish-mode)
 (package! company-tabnine)
+(package! caddyfile-mode)
 (package! posframe)
 (package! dap-mode)
 (package! plz :recipe (:host github :repo "alphapapa/plz.el"))
