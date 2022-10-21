@@ -88,27 +88,16 @@
 
 ;; Github Copilot
 ;; accept completion from copilot and fallback to company
-(defun my-tab ()
-  (interactive)
-  (or (copilot-accept-completion)
-      (company-indent-or-complete-common nil)))
-
 (use-package! copilot
   :hook (prog-mode . copilot-mode)
   :config
   (map!
-   (:when (modulep! :completion company))
    :mode prog-mode
    ;;"C-TAB" 'copilot-accept-completion-by-word
    ;;"C-<tab>" 'copilot-accept-completion-by-word
-   :map company-active-map
-   "<tab>" 'my-tab
-   "TAB" 'my-tab
    "M-]" 'copilot-accept-completion-by-word
-   :map company-mode-map
-   "<tab>" 'my-tab
-   "TAB" 'my-tab
-   "M-]" 'copilot-accept-completion-by-word))
+   "M-n" 'copilot-next-completion
+   "M-RET" 'copilot-accept-completion))
 ;; Github Copilot
 
 ;;SQL
