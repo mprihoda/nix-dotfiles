@@ -5,7 +5,7 @@
 with lib;
 
 let
-  pkg = if pkgs.stdenv.isDarwin then pkgs.emacs else pkgs.emacs-nox;
+  pkg = if pkgs.stdenv.isDarwin then pkgs.emacs else pkgs.emacsPgtkNativeComp;
   emacsWithPackages = (pkgs.emacsPackagesFor pkg).emacsWithPackages;
   myemacs = emacsWithPackages (epkgs: [ epkgs.melpaPackages.vterm ]);
 
@@ -28,7 +28,9 @@ let
     in pkgs.writeScript "emacs-daemon" ''
       #!${pkgs.zsh}/bin/zsh
       source ~/.zshrc
-      export PATH=$PATH:${lib.makeBinPath [ pkgs.bash pkgs.git pkgs.sqlite pkgs.unzip ]}
+      export PATH=$PATH:${
+        lib.makeBinPath [ pkgs.bash pkgs.git pkgs.sqlite pkgs.unzip ]
+      }
       if [ ! -d $HOME/.emacs.d/.git ]; then
         mkdir -p $HOME/.emacs.d
         git -C $HOME/.emacs.d init
