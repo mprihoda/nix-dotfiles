@@ -14,8 +14,8 @@
         tags = +spam
 
         [FolderNameFilter]
-        folder_explicit_list = fastmail/Trash fastmail/Spam 'Read Later'
-        folder_transforms = fastmail/Trash:deleted fastmail/Spam:spam 'Read Later':later
+        folder_explicit_list = fastmail/Trash fastmail/Spam
+        folder_transforms = fastmail/Trash:deleted fastmail/Spam:spam
 
         [KillThreadsFilter]
         [ListMailsFilter]
