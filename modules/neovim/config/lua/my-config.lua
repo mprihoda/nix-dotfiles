@@ -76,7 +76,6 @@ map("n", "<leader>dl", [[<cmd>lua require"dap".run_last()<CR>]])
 local cmp = require("cmp")
 cmp.setup({
   sources = {
-    { name = "cmp_tabnine" },
     { name = "nvim_lsp" },
     { name = "vsnip" },
   },

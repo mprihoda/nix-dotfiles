@@ -17,7 +17,6 @@
       nvim-cmp
       cmp-nvim-lsp
       cmp-vsnip
-      cmp-tabnine
       vim-vsnip
       plenary-nvim
       popup-nvim
