@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: Laminar Component
+# uuid: lcomp
+# key: lcomp
+# --
+import com.raquo.laminar.api.L.{*, given}
+
+object ${1:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}:
+  case class ViewModel()
+  def render($m: Signal[ViewModel]): HtmlElement =
+    $0

@@ -8,12 +8,23 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
+    doom-emacs = {
+      url = "github:hlissner/doom-emacs";
+      flake = false;
+    };
   };
 
-  outputs = { nixpkgs, home-manager, ... }:
+  outputs = { nixpkgs, home-manager, emacs-overlay, doom-emacs, ... }:
     let
       system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [
+          emacs-overlay.overlay
+          (self: super: { doomEmacsRevision = doom-emacs.rev; })
+        ];
+      };
     in {
       homeConfigurations.mph = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
@@ -22,6 +33,7 @@
         # the path to your home.nix.
         modules = [
           ./home.nix
+          (import ../../modules/doom-emacs {})
         ];
 
         # Optionally use extraSpecialArgs

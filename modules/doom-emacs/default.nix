@@ -1,4 +1,4 @@
-{ x11 ? false, user ? "mph", serviceInit ? ./linux-service.nix }:
+{ x11 ? false, serviceInit ? ./linux-service.nix }:
 
 { config, lib, pkgs, ... }:
 
@@ -45,16 +45,13 @@ let
 
 in mkMerge [
   {
-    home-manager.users.${user} = {
-      programs.emacs = {
-        enable = true;
-        package = myemacs;
-      };
-
-      home.packages = [ (editorScript { inherit x11; }) ];
-
+    programs.emacs = {
+      enable = true;
+      package = myemacs;
     };
+
+    home.packages = [ (editorScript { inherit x11; }) ];
   }
 
-  (import serviceInit { inherit daemonScript user config pkgs lib; })
+  (import serviceInit { inherit daemonScript config pkgs lib; })
 ]
