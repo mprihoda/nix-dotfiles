@@ -30,10 +30,6 @@
         useDHCP = false;
         ipv4.addresses = [
           {
-            address = "193.86.200.14";
-            prefixLength = 24;
-          }
-          {
             address = "193.86.200.16";
             prefixLength = 24;
           }
