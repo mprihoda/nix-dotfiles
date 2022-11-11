@@ -39,7 +39,6 @@
     ## for docker
     pass
     gnupg
-    pinentry
     tigervnc
     socat
 
@@ -50,7 +49,23 @@
   imports = [ ../../modules/neovim ];
 
   programs.home-manager.enable = true;
-  programs.fish.enable = true;
+  programs.fish = {
+    enable = true;
+    interactiveShellInit = ''
+    string match -q "$TERM_PROGRAM" "vscode" and . (code --locate-shell-integration-path fish)
+    '';
+  };
+  programs.gpg.enable = true;
+
+  services.gpg-agent = {
+    enable = true;
+    enableSshSupport = true;
+    pinentryFlavor = "emacs";
+    extraConfig = ''
+      allow-emacs-pinentry
+      allow-loopback-pinentry
+    '';
+  };
 
   home.stateVersion = "22.11";
 }
