@@ -52,7 +52,7 @@
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
-    string match -q "$TERM_PROGRAM" "vscode" and . (code-insiders --locate-shell-integration-path fish)
+      if string match -q "$TERM_PROGRAM" "vscode"; . (code-insiders --locate-shell-integration-path fish); end
     '';
   };
   programs.gpg.enable = true;
