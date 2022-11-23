@@ -1,6 +1,7 @@
-{ daemonScript, config, ... }:
+{ config, lib, pkgs, ... }:
 
-{
+let daemonScript = import ./daemon-script.nix { inherit config lib pkgs; };
+in {
   launchd.user.agents = {
     emacs = {
       path = [ config.environment.systemPath ];

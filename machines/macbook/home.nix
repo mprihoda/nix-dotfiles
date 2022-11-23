@@ -1,7 +1,9 @@
 { pkgs, ... }:
 
 {
-  imports = [ ./modules/remote-notmuch ../../modules/neovim ];
+  imports =
+    [ ./modules/remote-notmuch ../../modules/neovim ../../modules/doom-emacs ];
+
   home.packages = with pkgs; [
     # system mgmt
     docker

@@ -24,12 +24,6 @@ in {
       home-manager.useGlobalPkgs = true;
       home-manager.users.mph = import ./home.nix;
     }
-    (import ../../modules/doom-emacs {
-      x11 = true;
-      # TODO: find a better way to do separate service config for darwin and linux
-      # mkIf config.stdenv.isDarwin does not work, it complains about unset
-      # config.environment.systemPath - which is on linux true
-      serviceInit = ../../modules/doom-emacs/darwin-service.nix;
-    })
+    ../../modules/doom-emacs/darwin-service.nix
   ];
 }
