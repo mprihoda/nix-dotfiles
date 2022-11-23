@@ -1,7 +1,6 @@
-{ config, lib, pkgs, ... }:
+{ myemacs, config, lib, pkgs, ... }:
 
 let
-  myemacs = config.home-manager.users.mph.programs.emacs.package;
   daemonFlag = if pkgs.stdenv.isDarwin then "--fg-daemon" else "--daemon";
 in pkgs.writeScript "emacs-daemon" ''
   #!${pkgs.zsh}/bin/zsh

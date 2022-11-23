@@ -24,6 +24,5 @@
         users.mph = import ./home.nix;
       };
     }
-    (import ../../modules/doom-emacs { })
   ];
 }
