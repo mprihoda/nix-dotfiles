@@ -1,6 +1,9 @@
 { config, lib, pkgs, ... }:
 
-let daemonScript = import ./daemon-script.nix { inherit config lib pkgs; };
+let daemonScript = import ./daemon-script.nix {
+  myemacs = config.programs.emacs.package;
+  inherit config lib pkgs;
+};
 in {
   systemd = {
     user.services.emacs-daemon = {
