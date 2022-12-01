@@ -46,13 +46,16 @@
     vim
   ];
 
-  imports = [ ../../modules/neovim ];
+  imports = [ ../../modules/neovim ../../modules/doom-emacs ];
 
   programs.home-manager.enable = true;
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
-      if string match -q "$TERM_PROGRAM" "vscode"; . (code-insiders --locate-shell-integration-path fish); end
+      if string match -q "$TERM_PROGRAM" "vscode"
+        set -l code (type -p code-insiders || type -p code)
+        . ("$code" --locate-shell-integration-path fish)
+      end
     '';
   };
   programs.gpg.enable = true;
