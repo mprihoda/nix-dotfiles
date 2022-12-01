@@ -37,6 +37,28 @@
            (file "inbox.org")
            "* TODO %?\n%i\n%a" :prepend t)
           )))
+(defun my/org-roam-daily-template  () "Template for dailies"
+  "#+title: %<%Y-%m-%d>
+* Today's Tasks
+** Must
+** Should
+** Could
+** Other
+*** Planning
+*** Mail, phone, meetings
+*** Workout
+*** Support
+*** Review
+*** Tools
+* Journal
+* Notes")
+
+(after! org-roam
+  (setq org-roam-dailies-capture-templates
+        '(("d" "default" entry "* %?" :target
+            (file+head "%<%Y-%m-%d>.org" my/org-roam-daily-template))
+          ("j" "journal" entry "* %<%H:%M> %?" :target
+           (file+head+olp "%<%Y-%m-%d>.org" my/org-roam-daily-template ("Journal"))))))
 
 ;; Automatically manage focus mode in pomodoro
 ;; Needs to have 2 shortcuts in the Shortcuts app that will start and stop the focus mode
@@ -54,3 +76,18 @@
         org-pomodoro-started-hook '(my/start-working)
         org-pomodoro-killed-hook '(my/stop-working)
         org-pomodoro-finished-hook '(my/stop-working)))
+
+(use-package! websocket
+    :after org-roam)
+
+(use-package! org-roam-ui
+    :after org-roam ;; or :after org
+;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+;;         a hookable mode anymore, you're advised to pick something yourself
+;;         if you don't care about startup time, use
+;;  :hook (after-init . org-roam-ui-mode)
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))

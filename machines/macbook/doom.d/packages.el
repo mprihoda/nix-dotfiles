@@ -49,7 +49,8 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
-(unpin! lsp-metals scala-mode sbt-mode)
+(unpin! lsp-metals scala-mode sbt-mode org-roam)
+(package! org-roam-ui)
 (package! scala-mode :recipe (:repo "Kazark/emacs-scala-mode" :branch "scala3"))
 (package! ob-ammonite)
 (package! fish-mode)
