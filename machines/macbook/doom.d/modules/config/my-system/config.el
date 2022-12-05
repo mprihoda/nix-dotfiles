@@ -39,7 +39,7 @@
           )))
 (defun my/org-roam-daily-template  () "Template for dailies"
   "#+title: %<%Y-%m-%d>
-* Today's Tasks
+* Tasks
 ** Must
 ** Should
 ** Could
@@ -58,7 +58,9 @@
         '(("d" "default" entry "* %?" :target
             (file+head "%<%Y-%m-%d>.org" my/org-roam-daily-template))
           ("j" "journal" entry "* %<%H:%M> %?" :target
-           (file+head+olp "%<%Y-%m-%d>.org" my/org-roam-daily-template ("Journal"))))))
+           (file+head+olp "%<%Y-%m-%d>.org" my/org-roam-daily-template ("Journal")))
+          ("t" "todo" entry "* [ ] %?\n%a" :target
+           (file+olp "%<%Y-%m-%d>.org" ("Tasks" "Must"))))))
 
 ;; Automatically manage focus mode in pomodoro
 ;; Needs to have 2 shortcuts in the Shortcuts app that will start and stop the focus mode
