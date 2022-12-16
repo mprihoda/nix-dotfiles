@@ -93,3 +93,9 @@
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
+
+(when (modulep! :ui doom-dashboard)
+  (add-to-list '+doom-dashboard-menu-sections
+               '("Open org-roam"
+                 :icon (all-the-icons-octicon "mortar-board" :face 'doom-dashboard-menu-title)
+                 :action my/org-roam-visit-index)))
