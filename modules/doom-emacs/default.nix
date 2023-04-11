@@ -3,7 +3,31 @@
 with lib;
 
 let
-  pkg = if pkgs.stdenv.isDarwin then pkgs.emacs else pkgs.emacs-nox;
+  basePkg = if pkgs.stdenv.isDarwin then pkgs.emacsGit else pkgs.emacsGit-nox;
+  pkg = basePkg.override {
+    treeSitterPlugins = with pkgs.tree-sitter-grammars; [
+      tree-sitter-bash
+      tree-sitter-c
+      tree-sitter-c-sharp
+      tree-sitter-cmake
+      tree-sitter-cpp
+      tree-sitter-css
+      tree-sitter-dockerfile
+      tree-sitter-go
+      tree-sitter-gomod
+      tree-sitter-java
+      tree-sitter-javascript
+      tree-sitter-json
+      tree-sitter-python
+      tree-sitter-ruby
+      tree-sitter-rust
+      tree-sitter-toml
+      tree-sitter-tsx
+      tree-sitter-typescript
+      tree-sitter-yaml
+      tree-sitter-scala
+    ];
+  };
   x11 = if pkgs.stdenv.isDarwin then true else false;
   emacsWithPackages = (pkgs.emacsPackagesFor pkg).emacsWithPackages;
   myemacs = emacsWithPackages (epkgs: [ epkgs.melpaPackages.vterm ]);

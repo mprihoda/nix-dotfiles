@@ -77,7 +77,12 @@
   (setq org-pomodoro-manual-break 't ; I like to keep running a little longer, if needed
         org-pomodoro-started-hook '(my/start-working)
         org-pomodoro-killed-hook '(my/stop-working)
-        org-pomodoro-finished-hook '(my/stop-working)))
+        org-pomodoro-finished-hook '(my/stop-working)
+        ; Let's do 45 minutes of focus
+        org-pomodoro-length 45
+        ; and 15 minutes of break
+        org-pomodoro-short-break-length 15
+        org-pomodoro-long-break-length 30))
 
 (use-package! websocket
     :after org-roam)
