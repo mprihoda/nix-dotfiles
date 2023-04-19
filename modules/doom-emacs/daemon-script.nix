@@ -8,14 +8,14 @@ in pkgs.writeScript "emacs-daemon" ''
   export PATH=$PATH:${
     lib.makeBinPath [ pkgs.bash pkgs.git pkgs.sqlite pkgs.unzip ]
   }
-  if [ ! -d $HOME/.emacs.d/.git ]; then
-    mkdir -p $HOME/.emacs.d
-    git -C $HOME/.emacs.d init
+  if [ ! -d $HOME/.config/emacs/.git ]; then
+    mkdir -p $HOME/.config/emacs
+    git -C $HOME/.config/emacs init
   fi
-  if [ $(git -C $HOME/.emacs.d rev-parse HEAD) != ${pkgs.doomEmacsRevision} ]; then
-    git -C $HOME/.emacs.d fetch https://github.com/hlissner/doom-emacs.git || true
-    git -C $HOME/.emacs.d checkout ${pkgs.doomEmacsRevision} || true
-    $HOME/.emacs.d/bin/doom sync || true
+  if [ $(git -C $HOME/.config/emacs rev-parse HEAD) != ${pkgs.doomEmacsRevision} ]; then
+    git -C $HOME/.config/emacs fetch https://github.com/hlissner/doom-emacs.git || true
+    git -C $HOME/.config/emacs checkout ${pkgs.doomEmacsRevision} || true
+    $HOME/.config/emacs/bin/doom sync || true
   fi
   exec ${myemacs}/bin/emacs ${daemonFlag}
 ''

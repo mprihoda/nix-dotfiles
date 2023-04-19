@@ -7,7 +7,7 @@
 -- TODO: remove bufferline
 --
 -- options
-vim.opt.completeopt = { "menu", "noinsert", "noselect" }
+vim.opt.completeopt = { "menuone", "noinsert", "noselect" }
 vim.opt.shortmess:remove("F")
 vim.opt.shortmess:append("c")
 vim.opt.wildmode = "longest:full"
@@ -47,6 +47,7 @@ map("n", "gws", "<cmd>lua vim.lsp.buf.workspace_symbol()<CR>")
 map("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
 map("n", "<leader>f", "<cmd>lua vim.lsp.buf.formatting()<CR>")
 map("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>")
+map("n", "<leader>cl", [[<cmd>lua vim.lsp.codelens.run()<CR>]])
 map("n", "<leader>ws", '<cmd>lua require"metals".hover_worksheet()<CR>')
 map("n", "<leader>aa", [[<cmd>lua vim.diagnostic.setqflist()<CR>]]) -- all workspace diagnostics
 map("n", "<leader>ae", [[<cmd>lua vim.diagnostic.setqflist({severity = "E"})<CR>]]) -- all workspace errors

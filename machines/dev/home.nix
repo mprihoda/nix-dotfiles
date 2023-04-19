@@ -46,7 +46,11 @@
     vim
   ];
 
-  imports = [ ../../modules/neovim ../../modules/doom-emacs ];
+  imports = [
+    ../../modules/neovim
+    ../../modules/doom-emacs
+    ../../modules/doom-emacs/linux-service.nix
+  ];
 
   programs.home-manager.enable = true;
   programs.fish = {
@@ -63,11 +67,11 @@
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
-    pinentryFlavor = "emacs";
-    extraConfig = ''
-      allow-emacs-pinentry
-      allow-loopback-pinentry
-    '';
+    pinentryFlavor = "curses";
+    # extraConfig = ''
+    #   allow-emacs-pinentry
+    #   allow-loopback-pinentry
+    # '';
   };
 
   home.stateVersion = "22.11";
