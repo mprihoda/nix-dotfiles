@@ -7,6 +7,8 @@
     };
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs/develop";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
+    emacs29-src.url = "github:emacs-mirror/emacs/emacs-29";
+    emacs29-src.flake = false;
     sops-nix.url = "github:Mic92/sops-nix";
     darwin = {
       url = "github:lnl7/nix-darwin/master";
@@ -35,7 +37,8 @@
     # Switch with: ./result/sw/bin/darwin-rebuild switch --flake .#Macbook-Pro
     darwinConfigurations = {
       "MacBook-Pro" = darwin.lib.darwinSystem (import ./machines/macbook {
-        inherit (inputs) home-manager nix-doom-emacs emacs-overlay doom-emacs;
+        inherit (inputs)
+          home-manager nix-doom-emacs emacs-overlay doom-emacs emacs29-src;
       });
     };
   };

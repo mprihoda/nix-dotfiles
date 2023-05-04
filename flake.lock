@@ -140,6 +140,23 @@
         "type": "github"
       }
     },
+    "emacs29-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1683195417,
+        "narHash": "sha256-VgbOcWJlu3xpSHTFGuDV+RFL6p11XEL6zva/yiAFTuM=",
+        "owner": "emacs-mirror",
+        "repo": "emacs",
+        "rev": "b42ccb2e5c133070c03ba8691ed8a0c6807b0da9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-mirror",
+        "ref": "emacs-29",
+        "repo": "emacs",
+        "type": "github"
+      }
+    },
     "evil-markdown": {
       "flake": false,
       "locked": {
@@ -536,6 +553,7 @@
         "doom-emacs": "doom-emacs",
         "eid-pki": "eid-pki",
         "emacs-overlay": "emacs-overlay",
+        "emacs29-src": "emacs29-src",
         "home-manager": "home-manager",
         "nix-doom-emacs": "nix-doom-emacs",
         "nixpkgs": "nixpkgs_4",

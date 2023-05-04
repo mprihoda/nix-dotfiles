@@ -3,7 +3,7 @@
 with lib;
 
 let
-  basePkg = if pkgs.stdenv.isDarwin then pkgs.emacsGit else pkgs.emacsGit-nox;
+  basePkg = if pkgs.stdenv.isDarwin then pkgs.emacs29 else pkgs.emacsGit-nox;
   pkg = basePkg.override {
     treeSitterPlugins = with pkgs.tree-sitter-grammars; [
       tree-sitter-bash
