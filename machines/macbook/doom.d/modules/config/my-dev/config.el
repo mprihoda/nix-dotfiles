@@ -6,50 +6,49 @@
         "~/Devel/commercial/iw"
         "~/Devel/personal"))
 
-(use-package! company-tabnine
-  :after company
-  :config
-  (cl-pushnew 'company-tabnine (default-value 'company-backends)))
-
 (after! company
-  (set-company-backend! 'prog-mode 'company-tabnine 'company-capf 'company-yasnippet)
+  (set-company-backend! 'prog-mode 'company-capf 'company-yasnippet)
   ;; Do not start the company mode automatically, it clashes a bit with copilot
   (setq company-idle-delay nil
         company-show-quick-access t))
 
-(use-package! lsp-mode
-  ;; Optional - enable lsp-mode automatically in scala files
-  ;; mph: scala-mode's lsp is hooked in scala's config.el
-  :defer
-  :hook
-  (scala-mode . lsp)
-  (lsp-mode . lsp-lens-mode)
-  :config
-  (setq lsp-prefer-flymake nil)
-  (setq lsp-enable-file-watchers t
-        lsp-file-watch-threshold 4000)
-  (remove-hook 'lsp-completion-mode-hook '+lsp-init-company-backends-h)
-  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]out\\'"))
+;; (use-package! lsp-mode
+;;   ;; Optional - enable lsp-mode automatically in scala files
+;;   ;; mph: scala-mode's lsp is hooked in scala's config.el
+;;   :defer
+;;   :hook
+;;   (scala-mode . lsp)
+;;   (lsp-mode . lsp-lens-mode)
+;;   :config
+;;   (setq lsp-prefer-flymake nil)
+;;   (setq lsp-enable-file-watchers t
+;;         lsp-file-watch-threshold 4000)
+;;   (remove-hook 'lsp-completion-mode-hook '+lsp-init-company-backends-h)
+;;   (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]out\\'"))
 
-(use-package! lsp-metals
-  :after lsp-mode
-  :config (setq lsp-metals-treeview-show-when-views-received nil
-                lsp-metals-show-implicit-arguments nil
-                lsp-metals-show-inferred-type nil))
-;; Metals
-(after! lsp-metals
-  (setq lsp-ui-sideline-diagnostic-max-lines 5)
-  (defvar lsp-metals-map (make-sparse-keymap) "A map for metals keybindings")
-  (map! :map lsp-metals-map
-        :mode scala-mode
-        :localleader
-        :desc "Toggle inferred types" "t" #'lsp-metals-toggle-show-inferred-type
-        :desc "Toggle implicit params" "p" #'lsp-metals-toggle-show-implicit-arguments
-        :desc "Toggle implicit conversions" "c" #'lsp-metals-toggle-show-implicit-conversions
-        :desc "Toggle show super" "s" #'lsp-metals-toggle-show-super-method-lenses
-        :desc "Build" "l" #'(lambda () "Build using sbt" (interactive) (sbt-command (if (boundp 'my/sbt-build-command) my/sbt-build-command "compile")))
-        :desc "SBT" "b" #'sbt-start)
-  )
+;; (use-package! lsp-metals
+;;   :after lsp-mode
+;;   :config (setq lsp-metals-treeview-show-when-views-received nil
+;;                 lsp-metals-show-implicit-arguments nil
+;;                 lsp-metals-show-inferred-type nil))
+;; ;; Metals
+;; (after! lsp-metals
+;;   (setq lsp-ui-sideline-diagnostic-max-lines 5)
+;;   (defvar lsp-metals-map (make-sparse-keymap) "A map for metals keybindings")
+;;   (map! :map lsp-metals-map
+;;         :mode scala-mode
+;;         :localleader
+;;         :desc "Toggle inferred types" "t" #'lsp-metals-toggle-show-inferred-type
+;;         :desc "Toggle implicit params" "p" #'lsp-metals-toggle-show-implicit-arguments
+;;         :desc "Toggle implicit conversions" "c" #'lsp-metals-toggle-show-implicit-conversions
+;;         :desc "Toggle show super" "s" #'lsp-metals-toggle-show-super-method-lenses
+;;         :desc "Build" "l" #'(lambda () "Build using sbt" (interactive) (sbt-command (if (boundp 'my/sbt-build-command) my/sbt-build-command "compile")))
+;;         :desc "SBT" "b" #'sbt-start)
+;;   )
+
+(use-package! eglot
+  ;; (optional) Automatically start metals for Scala files.
+  :hook (scala-mode . eglot-ensure))
 
 ;; Enable sbt mode for executing sbt commands
 (use-package! sbt-mode

@@ -29,8 +29,8 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-gruvbox-light-variant "medium")
-(setq doom-theme 'doom-gruvbox-light)
+;;(setq doom-gruvbox-light-variant "medium")
+(setq doom-theme 'doom-solarized-light)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -58,14 +58,14 @@
 ;; I could just remove the .jar from the pattern, but I don't think I'm going to miss it anytime soon
 ;; TODO: just filter out, instead of setting
 (setq tramp-archive-suffixes
-      '("7z" "apk" "ar" "cab" "CAB" "cpio" "deb" "depot" "exe" "iso" "lzh" "LZH" "msu" "MSU" "mtree" "odb" "odf" "odg" "odp" "ods" "odt" "pax" "rar" "rpm" "shar" "tar" "tbz" "tgz" "tlz" "txz" "tzst" "warc" "xar" "xpi" "xps" "zip" "ZIP")
-      explicit-shell-file-name "/run/current-system/sw/bin/bash")
+      '("7z" "apk" "ar" "cab" "CAB" "cpio" "deb" "depot" "exe" "iso" "lzh" "LZH" "msu" "MSU" "mtree" "odb" "odf" "odg" "odp" "ods" "odt" "pax" "rar" "rpm" "shar" "tar" "tbz" "tgz" "tlz" "txz" "tzst" "warc" "xar" "xpi" "xps" "zip" "ZIP"))
 
 (after! tramp
-  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+  (add-to-list 'tramp-remote-path "~/.nix-profile/bin")
+  (add-to-list 'tramp-remote-path "~/.local/share/coursier/bin"))
 
 (setq alert-default-style 'notifier)
 
 (after! evil-escape
   (setq evil-escape-key-sequence "fd"))
-
