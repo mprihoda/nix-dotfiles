@@ -49,12 +49,13 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
-(unpin! lsp-metals scala-mode)
-(package! scala-mode :recipe (:repo "Kazark/emacs-scala-mode" :branch "scala3"))
+;(unpin! lsp-metals scala-mode)
+;(package! scala-mode :recipe (:repo "Kazark/emacs-scala-mode" :branch "scala3"))
+(unpin! eglot)
 (package! fish-mode)
-(package! company-tabnine)
-(package! posframe)
-(package! dap-mode)
+;(package! company-tabnine)
+;(package! posframe)
+;(package! dap-mode)
 (package! pinentry)
 (package! caddyfile-mode)
 

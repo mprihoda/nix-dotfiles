@@ -10,6 +10,7 @@
     docker-machine
     docker-credential-helpers
     ansible
+    mosh
 
     # SQL
     mariadb-client
@@ -22,7 +23,7 @@
     sbt
     bloop
     coursier
-    nodejs-16_x
+    nodejs-18_x
     yarn
 
     # utitilies
@@ -53,6 +54,14 @@
   ];
 
   programs.home-manager.enable = true;
+
+  programs.bash = {
+    enable = true;
+    # bashrcExtra = ''
+    #   BASH_ENV="${config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh"
+    # '';
+  };
+
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
@@ -63,6 +72,7 @@
     '';
   };
   programs.gpg.enable = true;
+  targets.genericLinux.enable = true;
 
   services.gpg-agent = {
     enable = true;

@@ -1,12 +1,11 @@
 { myemacs, config, lib, pkgs, ... }:
 
-let
-  daemonFlag = if pkgs.stdenv.isDarwin then "--fg-daemon" else "--daemon";
+let daemonFlag = if pkgs.stdenv.isDarwin then "--fg-daemon" else "--daemon";
 in pkgs.writeScript "emacs-daemon" ''
   #!${pkgs.zsh}/bin/zsh
-  source ~/.zshrc
+  test -e "~/.zshrc" && source ~/.zshrc
   export PATH=$PATH:${
-    lib.makeBinPath [ pkgs.bash pkgs.git pkgs.sqlite pkgs.unzip ]
+    lib.makeBinPath [ pkgs.bash pkgs.git pkgs.sqlite pkgs.unzip pkgs.gcc ]
   }
   if [ ! -d $HOME/.config/emacs/.git ]; then
     mkdir -p $HOME/.config/emacs
