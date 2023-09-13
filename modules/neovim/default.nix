@@ -35,6 +35,8 @@
       # TODO: replace with feline-nvim
       lualine-nvim
       vim-grepper
+      copilot-lua
+      copilot-cmp
     ];
     # Point directly to .dotfiles for now. I will move the config into nix after it is a bit more stable.
     extraConfig = ''

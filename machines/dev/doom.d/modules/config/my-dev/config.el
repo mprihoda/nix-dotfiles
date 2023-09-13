@@ -60,6 +60,10 @@
   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
   (setq sbt:program-options '("-Dsbt.supershell=false" "-Dsbt.semanticdb=true")))
 
+(use-package! eglot
+  ;; (optional) Automatically start metals for Scala files.
+  :hook (scala-mode . eglot-ensure))
+
 ;; Do not use company mode in sbt buffers
 (add-to-list 'company-global-modes 'sbt-mode t)
 

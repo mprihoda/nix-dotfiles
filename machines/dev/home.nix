@@ -45,6 +45,7 @@
 
     # source support
     vim
+    helix
   ];
 
   imports = [
@@ -75,7 +76,7 @@
   targets.genericLinux.enable = true;
 
   services.gpg-agent = {
-    enable = true;
+    enable = false;
     enableSshSupport = true;
     pinentryFlavor = "curses";
     # extraConfig = ''
