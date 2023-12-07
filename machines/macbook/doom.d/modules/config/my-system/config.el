@@ -1,17 +1,18 @@
 ;;; config/my-system/config.el -*- lexical-binding: t; -*-
 ;;;
 (defun org-agenda-focus-active() "Focus on todos for active projects."
-  (interactive)
-  (setq org-agenda-files '("inbox.org" "todo.org" "projects_active.org" "tech_support.org")))
+       (interactive)
+       (setq org-agenda-files '("inbox.org" "todo.org" "projects_active.org" "tech_support.org")))
 
 (defun org-agenda-focus-all() "Focus on todos for all projects."
-  (interactive)
-  (setq org-agenda-files '("inbox.org" "todo.org" "projects_active.org" "tech_support.org" "projects_backlog.org")))
+       (interactive)
+       (setq org-agenda-files '("inbox.org" "todo.org" "projects_active.org" "tech_support.org" "projects_backlog.org")))
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory (expand-file-name "~/org/")
-      org-agenda-files '("inbox.org" "todo.org" "projects_active.org" "tech_support.org")
+      ;; org-agenda-files '("inbox.org" "todo.org" "projects_active.org" "tech_support.org")
+      org-agenda-files '("todo.org")
       org-roam-directory (expand-file-name "roam" org-directory)
       org-roam-dailies-directory "daily/"
       org-roam-v2-ack t)
@@ -26,7 +27,7 @@
 
 (after! org
   (add-to-list 'org-latex-packages-alist
-                         '("AUTO" "babel" t ("pdflatex")))
+               '("AUTO" "babel" t ("pdflatex")))
   (map! (:map org-mode-map
          :leader
          :prefix "n"
@@ -38,7 +39,7 @@
            "* TODO %?\n%i\n%a" :prepend t)
           )))
 (defun my/org-roam-daily-template  () "Template for dailies"
-  "#+title: %<%Y-%m-%d>
+       "#+title: %<%Y-%m-%d>
 * Tasks
 ** Must
 ** Should
@@ -56,7 +57,7 @@
 (after! org-roam
   (setq org-roam-dailies-capture-templates
         '(("d" "default" entry "* %?" :target
-            (file+head "%<%Y-%m-%d>.org" my/org-roam-daily-template))
+           (file+head "%<%Y-%m-%d>.org" my/org-roam-daily-template))
           ("j" "journal" entry "* %<%H:%M> %?" :target
            (file+head+olp "%<%Y-%m-%d>.org" my/org-roam-daily-template ("Journal")))
           ("t" "todo" entry "* [ ] %?\n%a" :target
@@ -78,9 +79,9 @@
         org-pomodoro-started-hook '(my/start-working)
         org-pomodoro-killed-hook '(my/stop-working)
         org-pomodoro-finished-hook '(my/stop-working)
-        ; Let's do 45 minutes of focus
+                                        ; Let's do 45 minutes of focus
         org-pomodoro-length 45
-        ; and 15 minutes of break
+                                        ; and 15 minutes of break
         org-pomodoro-short-break-length 15
         org-pomodoro-long-break-length 30))
 
@@ -99,8 +100,40 @@
 ;;          org-roam-ui-update-on-save t
 ;;          org-roam-ui-open-on-start t))
 
-(when (modulep! :ui doom-dashboard)
-  (add-to-list '+doom-dashboard-menu-sections
-               '("Open org-roam"
-                 :icon (all-the-icons-octicon "mortar-board" :face 'doom-dashboard-menu-title)
-                 :action my/org-roam-visit-index)))
+;;(when (modulep! :ui doom-dashboard)
+;;  (add-to-list '+doom-dashboard-menu-sections
+;;               '("Open org-roam"
+;;                 :icon (all-the-icons-octicon "mortar-board" :face 'doom-dashboard-menu-title)
+;;                 :action my/org-roam-visit-index)))
+
+;;(use-package! obsidian
+;;  :ensure t
+;;  :demand t
+;;  :config
+;;  (obsidian-specify-path "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/main")
+;;  (global-obsidian-mode t))
+
+;;(defun my-org-open-obsidian (path)
+;;  "Open Obsidian link using obsidian-find-file"
+;;  (-> path
+;;      obsidian-prepare-file-path
+;;      obsidian-wiki->normal
+;;      (obsidian-tap #'message)
+;;      (obsidian-find-file path)))
+
+;;(defun org-obsidian-insert-wikilink (&optional arg)
+;;  "Insert a link to file in wikiling format."
+;;  (interactive "P")
+;;  (let* ((file (obsidian--request-link arg))
+;;         (filename (plist-get file :file))
+;;         (description (plist-get file :description))
+;;         (no-ext (file-name-sans-extension filename))
+;;         (link (if (and description (not (s-ends-with-p description no-ext)))
+;;                   (s-concat "[[obsidian:" no-ext "][" description"]]")
+;;                 (s-concat "[[obsidian:" no-ext "][" no-ext "]]"))))
+;;    (insert link)))
+
+;;(after! org
+;;  (org-link-set-parameters "obsidian"
+;;                           :follow #'my-org-open-obsidian
+;;                           :export #'org-org-link-export))

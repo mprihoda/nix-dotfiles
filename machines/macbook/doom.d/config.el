@@ -63,7 +63,10 @@
 (after! tramp
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
   (add-to-list 'tramp-remote-path "~/.nix-profile/bin")
-  (add-to-list 'tramp-remote-path "~/.local/share/coursier/bin"))
+  (add-to-list 'tramp-remote-path "~/.local/share/coursier/bin")
+  (connection-local-set-profile-variables 'remote-fish '((shell-file-name . "/home/mph/.nix-profile/bin/fish")))
+  (connection-local-set-profiles '(:application tramp :protocol "ssh" :machine "dev") 'remote-fish)
+  )
 
 (setq alert-default-style 'notifier)
 

@@ -48,13 +48,18 @@
 
 (use-package! eglot
   ;; (optional) Automatically start metals for Scala files.
-  :hook (scala-mode . eglot-ensure))
+  :hook
+                                        ; (scala-ts-mode . eglot-ensure)
+  (scala-mode . eglot-ensure))
+
+(after! tree-sitter
+  (add-to-list 'tree-sitter-major-mode-language-alist '(scala-ts-mode . scala)))
 
 ;; Enable sbt mode for executing sbt commands
 (use-package! sbt-mode
   :commands sbt-start sbt-command
   :config
-  ; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+                                        ; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
   ;; allows using SPACE when in the minibuffer
   (substitute-key-definition
    'minibuffer-complete-word
@@ -97,3 +102,21 @@
 (after! sql
   (sql-set-product-feature 'mysql :prompt-regexp "[mM]y[sS][qQ][lL]\\( \\[.*?]\\)?>")
   (load-file (expand-file-name "sql-connections.el.gpg" doom-private-dir)))
+
+(defun sbtn-repl ()
+  "Start a sbtn REPL using comint."
+  (interactive)
+  (let ((buffer (comint-check-proc "sbtn-repl"))) ; Check if the REPL is already running
+    ;; If there's no existing process, create one
+    (pop-to-buffer
+     (if (or buffer (not (derived-mode-p 'comint-mode))
+             (comint-check-proc (current-buffer)))
+         (get-buffer-create (or buffer "*sbtn-repl*"))
+       (current-buffer)))
+    (unless buffer
+      (comint-exec (current-buffer) "sbtn-repl" "/nix/store/fa4n75q2avxr19fw142gfvhr9bd5hmvk-sbt-1.9.3/bin/sbtn" nil nil)
+      ;; Set the prompt read-only
+      (setq comint-prompt-read-only t))))
+
+(after! projectile
+  (setq projectile-git-fd-args "--color=never -H -0 -E .git -tf --strip-cwd-prefix"))

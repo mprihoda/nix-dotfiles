@@ -1,16 +1,17 @@
-{ home-manager, nix-doom-emacs, emacs-overlay, doom-emacs, emacs29-src }:
+{ home-manager, doom-emacs }:
 let
   overlays = { ... }: {
     nixpkgs.overlays = [
-      emacs-overlay.overlays.default
-      (final: prev: {
-        emacs29 = prev.emacsGit.overrideAttrs (old: {
-          name = "emacs29";
-          version = "29.0-${emacs29-src.shortRev}";
-          src = emacs29-src;
-          withPgtk = true;
-        });
-      })
+      # Remove the emacs-overlay for now, using Nix default
+      # emacs-overlay.overlays.default
+      # (final: prev: {
+      #   emacs29 = prev.emacsGit.overrideAttrs (old: {
+      #     name = "emacs29";
+      #     version = "29.0-${emacs29-src.shortRev}";
+      #     src = emacs29-src;
+      #     withPgtk = true;
+      #   });
+      # })
       # TODO: Remove after https://github.com/NixOS/nixpkgs/issues/137678 is fixed
       # (import ./overlays/beautifulsoup4_fix.nix)
       # TODO: Remove after https://github.com/NixOS/nixpkgs/pull/161216 is in

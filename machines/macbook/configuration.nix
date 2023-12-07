@@ -5,9 +5,8 @@
 
   environment.shells = [ pkgs.bashInteractive pkgs.zsh pkgs.fish ];
 
-  environment.variables.EDITOR = "emacsclient -t";
-  environment.variables.VISUAL = "emacsclient -c -a emacs";
-  environment.variables.GIT_EDITOR = "emacsclient -c -a emacs";
+  environment.variables.EDITOR = "hx";
+  environment.variables.GIT_EDITOR = "hx";
 
   nix.nixPath = [
     { darwin-config = "${config.environment.darwinConfig}"; }

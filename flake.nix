@@ -1,8 +1,9 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
-      url = "github:rycee/home-manager/master";
+      url = "https://github.com/nix-community/home-manager/archive/release-23.05.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs/develop";
@@ -38,7 +39,7 @@
     darwinConfigurations = {
       "MacBook-Pro" = darwin.lib.darwinSystem (import ./machines/macbook {
         inherit (inputs)
-          home-manager nix-doom-emacs emacs-overlay doom-emacs emacs29-src;
+          home-manager doom-emacs;
       });
     };
   };

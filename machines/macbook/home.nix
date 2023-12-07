@@ -52,6 +52,7 @@
     fontconfig
     ledger
     ledger-autosync
+    helix
   ];
   home.stateVersion = "22.11";
 }
