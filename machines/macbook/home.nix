@@ -16,7 +16,7 @@
     mariadb-client
 
     # language support
-    adoptopenjdk-bin
+    # adoptopenjdk-bin
     nixfmt
     ammonite
 
@@ -40,6 +40,7 @@
     direnv
     mosh
     #eternal-terminal
+    kitty
     coursier
     #ipfs
 
@@ -53,6 +54,15 @@
     ledger
     ledger-autosync
     helix
+
+    # fonts
+    iosevka-bin
+    (iosevka-bin.override { variant = "sgr-iosevka-aile"; })
+    (iosevka-bin.override { variant = "sgr-iosevka-fixed"; })
+    (iosevka-bin.override { variant = "sgr-iosevka-term"; })
   ];
+
+  fonts.fontconfig.enable = true;
+
   home.stateVersion = "22.11";
 }

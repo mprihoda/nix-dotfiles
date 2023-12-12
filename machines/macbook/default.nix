@@ -23,7 +23,7 @@ let
   };
 
 in {
-  system = "x86_64-darwin";
+  system = "aarch64-darwin";
   modules = [
     home-manager.darwinModules.home-manager
     ./cachix.nix
