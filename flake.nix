@@ -1,9 +1,9 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
-      url = "https://github.com/nix-community/home-manager/archive/release-23.05.tar.gz";
+      url = "https://github.com/nix-community/home-manager/archive/release-24.05.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-doom-emacs.url = "github:vlaci/nix-doom-emacs/develop";

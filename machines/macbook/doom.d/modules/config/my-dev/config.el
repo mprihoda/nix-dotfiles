@@ -66,7 +66,14 @@
    'self-insert-command
    minibuffer-local-completion-map)
   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
-  (setq sbt:program-options '("-Dsbt.supershell=false" "-Dsbt.semanticdb=true")))
+  (setq sbt:program-options '("-Dsbt.supershell=false" "-Dsbt.semanticdb=true"))
+  (map! :map scala-mode-sbt-map
+        :mode scala-mode
+        :localleader
+        :desc "Start sbt" "s" #'sbt-start
+        :desc "Run sbt command" "c" #'sbt-command
+        :desc "Compile" "b" #'sbt-do-compile
+        ))
 
 ;; Do not use company mode in sbt buffers
 (add-to-list 'company-global-modes 'sbt-mode t)
@@ -97,6 +104,20 @@
    "M-RET" 'copilot-accept-completion
    ))
 ;; Github Copilot
+
+;; Claude shell
+;;(use-package! claude-shell
+;;  :config
+;;  (setq! claude-shell-api-token ""))
+
+;; GPTel
+(use-package! gptel
+  :config
+  ;; OPTIONAL configuration
+  (setq!
+   gptel-model "claude-3-opus-20240229" ;  "claude-3-opus-20240229" also available
+   gptel-backend (gptel-make-anthropic "Claude"
+                                       :stream t :key "")))
 
 ;;SQL
 (after! sql

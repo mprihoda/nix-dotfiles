@@ -25,7 +25,7 @@
       vim-nix
       nvim-treesitter
       nvim-treesitter-textobjects
-      nvim-ts-rainbow
+      rainbow-delimiters-nvim
       # TODO: add plugins, see https://github.com/shadowninja55/nixos-config/blob/master/flake.nix
       # nest-nvim
       # dracula-nvim

@@ -8,7 +8,6 @@
     # system mgmt
     docker
     docker-compose
-    docker-machine
     docker-credential-helpers
     ansible
 
@@ -34,11 +33,11 @@
     fd
     mosh
     tmux
+    zellij
     gnupg
     coreutils
     fish
     direnv
-    mosh
     #eternal-terminal
     kitty
     coursier
@@ -57,9 +56,9 @@
 
     # fonts
     iosevka-bin
-    (iosevka-bin.override { variant = "sgr-iosevka-aile"; })
-    (iosevka-bin.override { variant = "sgr-iosevka-fixed"; })
-    (iosevka-bin.override { variant = "sgr-iosevka-term"; })
+    (iosevka-bin.override { variant = "SGr-Iosevka"; })
+    (iosevka-bin.override { variant = "SGr-IosevkaFixed"; })
+    (iosevka-bin.override { variant = "SGr-IosevkaTerm"; })
   ];
 
   fonts.fontconfig.enable = true;

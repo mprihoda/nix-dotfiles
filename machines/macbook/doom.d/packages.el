@@ -69,3 +69,9 @@
   :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
 ;;(package! i-ching)
 ;;(package! obsidian)
+;;(package! org-ai
+;;  :recipe (:host github :repo "rksm/org-ai" :files ("*.el" "README.md" "snippets")))
+;;(package! claude-shell
+;;  :recipe (:host github :repo "arminfriedl/claude-shell"
+;;           :files ("claude-shell.el" "claude-shell-fontifier.el")))
+(package! gptel)

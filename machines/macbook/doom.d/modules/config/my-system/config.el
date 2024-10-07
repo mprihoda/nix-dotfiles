@@ -63,6 +63,12 @@
           ("t" "todo" entry "* [ ] %?\n%a" :target
            (file+olp "%<%Y-%m-%d>.org" ("Tasks" "Must"))))))
 
+(use-package! org-ai
+  :hook (org-mode . org-ai-mode)
+  :config
+  (setq org-ai-openai-api-token "")
+  (org-ai-install-yasnippets))
+
 ;; Automatically manage focus mode in pomodoro
 ;; Needs to have 2 shortcuts in the Shortcuts app that will start and stop the focus mode
 (defun my/run-shortcut (name)
