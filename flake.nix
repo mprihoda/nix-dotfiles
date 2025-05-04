@@ -1,18 +1,18 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
-      url = "https://github.com/nix-community/home-manager/archive/release-24.05.tar.gz";
+      url = "https://github.com/nix-community/home-manager/archive/release-24.11.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-doom-emacs.url = "github:vlaci/nix-doom-emacs/develop";
+    nix-doom-emacs.url = "github:nix-community/nix-doom-emacs/develop";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
-    emacs29-src.url = "github:emacs-mirror/emacs/emacs-29";
-    emacs29-src.flake = false;
+    emacs30-src.url = "github:emacs-mirror/emacs/emacs-30";
+    emacs30-src.flake = false;
     sops-nix.url = "github:Mic92/sops-nix";
     darwin = {
-      url = "github:lnl7/nix-darwin/master";
+      url = "github:lnl7/nix-darwin/nix-darwin-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

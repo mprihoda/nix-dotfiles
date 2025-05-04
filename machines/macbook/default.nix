@@ -28,11 +28,11 @@ in {
     home-manager.darwinModules.home-manager
     ./cachix.nix
     ./configuration.nix
-    overlays
+    # overlays
     {
       home-manager.useGlobalPkgs = true;
       home-manager.users.mph = import ./home.nix;
     }
-    ../../modules/doom-emacs/darwin-service.nix
+    # ../../modules/doom-emacs/darwin-service.nix
   ];
 }

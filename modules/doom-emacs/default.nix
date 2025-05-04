@@ -3,7 +3,7 @@
 with lib;
 
 let
-  basePkg = if pkgs.stdenv.isDarwin then pkgs.emacs29 else pkgs.emacs29-nox;
+  basePkg = if pkgs.stdenv.isDarwin then pkgs.emacs30 else pkgs.emacs30-nox;
   x11 = if pkgs.stdenv.isDarwin then true else false;
   emacsWithPackages = (pkgs.emacsPackagesFor basePkg).emacsWithPackages;
   myemacs = emacsWithPackages (epkgs: [

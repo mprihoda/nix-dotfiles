@@ -1,23 +1,22 @@
 { pkgs, ... }:
 
 {
-  imports =
-    [ ./modules/remote-notmuch ../../modules/neovim ../../modules/doom-emacs ];
+  #imports =
+  #  [ ./modules/remote-notmuch ../../modules/neovim ../../modules/doom-emacs ];
 
   home.packages = with pkgs; [
     # system mgmt
     docker
     docker-compose
     docker-credential-helpers
-    ansible
+    # ansible
 
     # SQL
     mariadb-client
 
     # language support
     # adoptopenjdk-bin
-    nixfmt
-    ammonite
+    nixfmt-classic
 
     # security
     pass
@@ -37,10 +36,12 @@
     gnupg
     coreutils
     fish
+    lazygit
     direnv
     #eternal-terminal
     kitty
     coursier
+    sq
     #ipfs
 
     # document tools
@@ -59,6 +60,11 @@
     (iosevka-bin.override { variant = "SGr-Iosevka"; })
     (iosevka-bin.override { variant = "SGr-IosevkaFixed"; })
     (iosevka-bin.override { variant = "SGr-IosevkaTerm"; })
+    cascadia-code
+    fira
+    hack-font
+    jetbrains-mono
+    victor-mono
   ];
 
   fonts.fontconfig.enable = true;
