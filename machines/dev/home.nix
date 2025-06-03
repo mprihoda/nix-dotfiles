@@ -80,7 +80,7 @@
   services.gpg-agent = {
     enable = true;
     enableSshSupport = false;
-    pinentryPackage = pkgs.pinentry-curses;
+    pinentry.package = pkgs.pinentry-curses;
     # extraConfig = ''
     #   allow-emacs-pinentry
     #   allow-loopback-pinentry
