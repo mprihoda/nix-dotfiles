@@ -7,7 +7,6 @@
     # system mgmt
     docker
     docker-compose
-    docker-machine
     docker-credential-helpers
     ansible
     mosh
@@ -16,14 +15,9 @@
     mariadb-client
 
     # language support
-    jdk17_headless
+    jdk21_headless
     nixfmt
-    scalafmt
-    ammonite
-    sbt
-    bloop
-    coursier
-    nodejs-18_x
+    # nodejs-18_x
     yarn
 
     # utitilies
@@ -58,6 +52,9 @@
 
   programs.bash = {
     enable = true;
+    bashrcExtra = ''
+        PATH=/home/mph/.npm-global/bin:/home/mph/.local/share/coursier/bin:$PATH
+    '';
     # bashrcExtra = ''
     #   BASH_ENV="${config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh"
     # '';
@@ -72,13 +69,18 @@
       end
     '';
   };
+
+  programs.gh.enable = true;
+
   programs.gpg.enable = true;
   targets.genericLinux.enable = true;
 
+  services.ssh-agent.enable = true;
+
   services.gpg-agent = {
-    enable = false;
-    enableSshSupport = true;
-    pinentryFlavor = "curses";
+    enable = true;
+    enableSshSupport = false;
+    pinentryPackage = pkgs.pinentry-curses;
     # extraConfig = ''
     #   allow-emacs-pinentry
     #   allow-loopback-pinentry
