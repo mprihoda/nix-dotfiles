@@ -5,47 +5,49 @@
 
   environment.shells = [ pkgs.bashInteractive pkgs.zsh pkgs.fish ];
 
-  environment.variables.EDITOR = "hx";
-  environment.variables.GIT_EDITOR = "hx";
+  # environment.variables.EDITOR = "hx";
+  # environment.variables.GIT_EDITOR = "hx";
 
-  nix.nixPath = [
-    { darwin-config = "${config.environment.darwinConfig}"; }
-    "$HOME/.nix-defexpr/channels"
-  ];
+  # nix.nixPath = [
+  #   { darwin-config = "${config.environment.darwinConfig}"; }
+  #   "$HOME/.nix-defexpr/channels"
+  # ];
 
   nix.settings.trusted-users = [ "mph" "@admin" ];
+
+  system.primaryUser = "mph";
 
   # Use a custom configuration.nix location.
   # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
   # environment.darwinConfig = "$HOME/.config/nixpkgs/darwin/configuration.nix";
 
-  # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
+  # environment.etc."msmtprc".text = ''
+  #   account default
+  #   host smtp.fastmail.com
 
-  environment.etc."msmtprc".text = ''
-    account default
-    host smtp.fastmail.com
+  #   auth on
+  #   user michal@prihoda.net
+  #   password 6yuwvdbakzt77qx6
 
-    auth on
-    user michal@prihoda.net
-    password 6yuwvdbakzt77qx6
-
-    tls on
-    tls_starttls off
-  '';
+  #   tls on
+  #   tls_starttls off
+  # '';
 
   # Create /etc/bashrc that loads the nix-darwin environment.
   programs.zsh.enable = true; # default shell on catalina
   programs.fish.enable = true;
   # environment.variables.SHELL = "${pkgs.fish}/bin/fish";
 
-  # programs.vim.enable = true;
-  # programs.vim.enableSensible = true;
+  programs.vim.enable = true;
+  programs.vim.enableSensible = true;
 
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
   };
+
+  programs.direnv.enable = true;
+  programs.direnv.nix-direnv.enable = true;
 
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog

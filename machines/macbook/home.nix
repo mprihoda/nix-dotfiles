@@ -37,9 +37,8 @@
     coreutils
     fish
     lazygit
-    direnv
     #eternal-terminal
-    kitty
+    #kitty
     coursier
     sq
     #ipfs
@@ -49,10 +48,10 @@
     texlive.combined.scheme-full
     texlab
 
-    msmtp
+    # msmtp
     fontconfig
-    ledger
-    ledger-autosync
+    # ledger
+    # ledger-autosync
     helix
 
     # fonts
