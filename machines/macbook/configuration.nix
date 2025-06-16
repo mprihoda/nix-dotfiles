@@ -42,8 +42,8 @@
   programs.vim.enableSensible = true;
 
   programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
+    enable = false;
+    enableSSHSupport = false;
   };
 
   programs.direnv.enable = true;
