@@ -71,6 +71,8 @@
   };
 
   programs.gh.enable = true;
+  programs.direnv.enable = true;
+  programs.direnv.nix-direnv.enable = true;
 
   programs.gpg.enable = true;
   targets.genericLinux.enable = true;
