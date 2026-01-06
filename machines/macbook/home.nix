@@ -17,11 +17,13 @@
     # language support
     # adoptopenjdk-bin
     nixfmt-classic
+    shellcheck
 
     # security
     pass
 
     # utitilies
+    coreutils
     terminal-notifier
     httpie
     jq
@@ -65,6 +67,11 @@
     jetbrains-mono
     victor-mono
   ];
+
+  programs.emacs = {
+    enable = true;
+    extraPackages = epkgs: [ epkgs.vterm ];
+  };
 
   fonts.fontconfig.enable = true;
 

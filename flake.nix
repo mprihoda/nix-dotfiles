@@ -7,17 +7,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-doom-emacs.url = "github:nix-community/nix-doom-emacs/develop";
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
-    emacs30-src.url = "github:emacs-mirror/emacs/emacs-30";
-    emacs30-src.flake = false;
     sops-nix.url = "github:Mic92/sops-nix";
     darwin = {
       url = "github:lnl7/nix-darwin/nix-darwin-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    doom-emacs.url = "github:hlissner/doom-emacs";
-    doom-emacs.flake = false;
 
     vscode-server.url = "github:msteen/nixos-vscode-server";
     eid-pki.url = "git+https://gitlab.e-bs.cz/mph/eid-nix-pki.git?ref=main";
