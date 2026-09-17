@@ -15,6 +15,16 @@
 
   nix.settings.trusted-users = [ "mph" "@admin" ];
 
+  # Reclaim store paths no longer reachable from a generation. The 30 day
+  # window keeps enough generations to roll back a bad rebuild.
+  nix.gc.automatic = true;
+  nix.gc.interval = { Weekday = 0; Hour = 3; Minute = 15; };
+  nix.gc.options = "--delete-older-than 30d";
+
+  # Hard-link identical files shared between store paths.
+  nix.optimise.automatic = true;
+  nix.optimise.interval = { Weekday = 0; Hour = 4; Minute = 15; };
+
   system.primaryUser = "mph";
 
   # Use a custom configuration.nix location.

@@ -5,6 +5,7 @@
   #  [ ./modules/remote-notmuch ../../modules/neovim ../../modules/doom-emacs ];
 
   home.packages = with pkgs; [
+    omniwm
     # system mgmt
     docker
     docker-compose
@@ -12,7 +13,7 @@
     # ansible
 
     # SQL
-    mariadb-client
+    mariadb.client
 
     # language support
     # adoptopenjdk-bin
